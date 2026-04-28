@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.PlannerPage"
+             Title="Planner"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="22" Padding="20,20,20,120">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Text="←"
+                        Clicked="OnBackClicked"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        CornerRadius="22"
+                        BackgroundColor="{StaticResource MobileSurfaceRaised}"
+                        TextColor="{StaticResource TextPrimary}"
+                        FontSize="18" />
+                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                    <Label Text="Academic Planner" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="Manage assignments, deadlines, and reminder scheduling." FontSize="13" TextColor="{StaticResource TextSecondary}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border Style="{StaticResource MobileHeroBorder}" Padding="20,16">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource GradStart}" Offset="0"/>
+                        <GradientStop Color="{StaticResource GradEnd}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Planner overview" TextColor="#DCE7FF" FontSize="11" FontAttributes="Bold" />
+                    <Label Text="Stay on top of coursework with a clearer daily snapshot" TextColor="White" FontSize="18" FontAttributes="Bold" LineBreakMode="WordWrap" />
+                    <Label Text="Track assignments, deadlines, and reminders in one place." TextColor="White" Opacity="0.88" FontSize="12" LineBreakMode="WordWrap" Margin="0,2,0,0" />
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="0,8,0,0">
+                        <Border BackgroundColor="#22FFFFFF" Stroke="Transparent" StrokeShape="RoundRectangle 16" Padding="10,8">
+                            <VerticalStackLayout Spacing="2">
+                                <Label x:Name="PendingTasksLabel" Text="0" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+                                <Label Text="Pending" TextColor="White" FontSize="11" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="1" BackgroundColor="#22FFFFFF" Stroke="Transparent" StrokeShape="RoundRectangle 16" Padding="10,8">
+                            <VerticalStackLayout Spacing="2">
+                                <Label x:Name="DueTodayLabel" Text="0" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+                                <Label Text="Due Today" TextColor="White" FontSize="11" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="2" BackgroundColor="#22FFFFFF" Stroke="Transparent" StrokeShape="RoundRectangle 16" Padding="10,8">
+                            <VerticalStackLayout Spacing="2">
+                                <Label x:Name="OverdueLabel" Text="0" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+                                <Label Text="Overdue" TextColor="White" FontSize="11" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource ModernCardBorder}" Padding="18">
+                <VerticalStackLayout Spacing="14">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Add task" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="Create a new academic item with a due date and optional reminder." FontSize="12" TextColor="{StaticResource TextSecondary}" />
+                    </VerticalStackLayout>
+                    <Border Style="{StaticResource MobileInputBorder}">
+                        <Entry x:Name="TitleEntry" Placeholder="Assignment or task title" TextColor="{StaticResource TextPrimary}" PlaceholderColor="{StaticResource TextSecondary}" />
+                    </Border>
+                    <Border Style="{StaticResource MobileInputBorder}">
+                        <Entry x:Name="SubjectEntry" Placeholder="Subject (e.g. Math, Science)" TextColor="{StaticResource TextPrimary}" PlaceholderColor="{StaticResource TextSecondary}" />
+                    </Border>
+                    <Border Style="{StaticResource MobileInputBorder}" Padding="14,10">
+                        <Editor x:Name="NotesEditor" Placeholder="Notes or instructions" AutoSize="TextChanges" HeightRequest="90" TextColor="{StaticResource TextPrimary}" PlaceholderColor="{StaticResource TextSecondary}" />
+                    </Border>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Border BackgroundColor="{StaticResource MobileSurfaceRaised}" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 18" Padding="12,4">
+                            <DatePicker x:Name="DueDatePicker" TextColor="{StaticResource TextPrimary}" />
+                        </Border>
+                        <Border Grid.Column="1" BackgroundColor="{StaticResource MobileSurfaceRaised}" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 18" Padding="12,4">
+                            <TimePicker x:Name="DueTimePicker" TextColor="{StaticResource TextPrimary}" />
+                        </Border>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Border BackgroundColor="{StaticResource MobileSurfaceRaised}" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 18" Padding="12,4">
+                            <Picker x:Name="PriorityPicker" Title="Priority" TextColor="{StaticResource TextPrimary}">
+                                <Picker.Items>
+                                    <x:String>High</x:String>
+                                    <x:String>Medium</x:String>
+                                    <x:String>Low</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                        <Border Grid.Column="1" BackgroundColor="{StaticResource MobilePrimaryMuted}" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 18" Padding="12,8">
+                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                <Label Text="🔔" FontSize="16" VerticalOptions="Center" />
+                                <Label Text="Reminder" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="13" FontAttributes="Bold" />
+                                <Switch x:Name="ReminderSwitch" IsToggled="True" OnColor="#10B981" ThumbColor="White" Toggled="OnReminderToggled" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </Grid>
+                    <Border x:Name="NotificationInfoBorder" BackgroundColor="{StaticResource MobilePrimaryMuted}" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 18" Padding="12" IsVisible="True">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="📲 Automatic notifications enabled" FontSize="12" FontAttributes="Bold" TextColor="#1D4ED8" />
+                            <Label FontSize="11" TextColor="#1E40AF" LineHeight="1.3">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="You'll receive alerts: " />
+                                        <Span Text="2 hours before" FontAttributes="Bold" />
+                                        <Span Text=", " />
+                                        <Span Text="at due time" FontAttributes="Bold" />
+                                        <Span Text=", and " />
+                                        <Span Text="30 min after" FontAttributes="Bold" />
+                                        <Span Text=" if incomplete" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Button Text="Add Task" Clicked="OnAddTaskClicked" BackgroundColor="{StaticResource MobilePrimary}" TextColor="White" CornerRadius="20" HeightRequest="48" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="Upcoming tasks" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <Label Text="Review active items sorted by urgency and completion state." FontSize="12" TextColor="{StaticResource TextSecondary}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="Refresh" Clicked="OnRefreshClicked" BackgroundColor="Transparent" TextColor="{StaticResource MobilePrimary}" />
+            </Grid>
+
+            <CollectionView x:Name="TasksCollection" SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <Border Style="{StaticResource ModernCardBorder}" Padding="20">
+                        <Label Text="No academic tasks yet. Add your first assignment above." HorizontalOptions="Center" TextColor="{StaticResource TextSecondary}" />
+                    </Border>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,12" Style="{StaticResource ModernCardBorder}" Padding="16">
+                            <VerticalStackLayout Spacing="12">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                        <Label Text="{Binding SubjectLabel}" FontSize="12" TextColor="#4361EE" />
+                                    </VerticalStackLayout>
+                                    <Border Grid.Column="1" Padding="10,4" Stroke="Transparent" StrokeShape="RoundRectangle 14" BackgroundColor="{StaticResource MobilePrimaryMuted}" VerticalOptions="Start">
+                                        <Label Text="{Binding Priority}" FontSize="11" TextColor="#4338CA" />
+                                    </Border>
+                                </Grid>
+                                <Label Text="{Binding Notes}" FontSize="13" TextColor="{StaticResource TextSecondary}" />
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                    <Label Text="⏰" FontSize="14" />
+                                    <Label Grid.Column="1" Text="{Binding DueDateLabel}" FontSize="12" TextColor="{StaticResource TextSecondary}" />
+                                </Grid>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                    <Label Text="🔔" FontSize="14" />
+                                    <Label Grid.Column="1" Text="{Binding ReminderLabel}" FontSize="12" TextColor="{StaticResource TextSecondary}" />
+                                </Grid>
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                    <Button Text="Done / Undo"
+                                            Clicked="OnToggleTaskClicked"
+                                            CommandParameter="{Binding Id}"
+                                            BackgroundColor="{StaticResource MobilePrimaryMuted}"
+                                            TextColor="{StaticResource MobilePrimaryDark}"
+                                            CornerRadius="18"
+                                            FontAttributes="Bold"
+                                            HeightRequest="42" />
+                                    <Button Grid.Column="1"
+                                            Text="Delete"
+                                            Clicked="OnDeleteTaskClicked"
+                                            CommandParameter="{Binding Id}"
+                                            BackgroundColor="#FEF2F2"
+                                            TextColor="#DC2626"
+                                            CornerRadius="18"
+                                            FontAttributes="Bold"
+                                            HeightRequest="42" />
+                                </Grid>
+                                <Border BackgroundColor="{StaticResource MobileSurfaceRaised}" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 16" Padding="10,6" HorizontalOptions="Start">
+                                    <Label Text="{Binding StatusLabel}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

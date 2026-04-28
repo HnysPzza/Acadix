@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.ProfilePage"
+             BackgroundColor="{StaticResource PageBackground}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header -->
+            <Grid HeightRequest="220">
+                <BoxView>
+                    <BoxView.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="{StaticResource GradStart}" Offset="0"/>
+                            <GradientStop Color="{StaticResource GradEnd}" Offset="1"/>
+                        </LinearGradientBrush>
+                    </BoxView.Background>
+                </BoxView>
+                <Ellipse WidthRequest="160" HeightRequest="160"
+                         HorizontalOptions="End" VerticalOptions="Start"
+                         Margin="0,-40,-40,0" Opacity="0.12">
+                    <Ellipse.Fill><SolidColorBrush Color="White"/></Ellipse.Fill>
+                </Ellipse>
+
+                <VerticalStackLayout Padding="24,50,24,20" Spacing="12" VerticalOptions="Start">
+                    <Label Text="👤 Profile" TextColor="White" FontSize="24" FontAttributes="Bold"/>
+
+                    <HorizontalStackLayout Spacing="16">
+                        <!-- Avatar Circle -->
+                        <Frame WidthRequest="70" HeightRequest="70"
+                               CornerRadius="35"
+                               BackgroundColor="#33FFFFFF"
+                               Padding="0"
+                               IsClippedToBounds="True">
+                            <Grid>
+                                <Label x:Name="AvatarLabel"
+                                       Text="BT"
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                                <Image x:Name="AvatarImage"
+                                       Aspect="AspectFill"
+                                       IsVisible="False"/>
+                            </Grid>
+                        </Frame>
+
+                        <!-- Name + Level -->
+                        <VerticalStackLayout VerticalOptions="Center" Spacing="4">
+                            <Label x:Name="NameLabel"
+                                   Text="Brain Trainer"
+                                   TextColor="White"
+                                   FontSize="20"
+                                   FontAttributes="Bold"/>
+                            <Frame Padding="10,4" CornerRadius="12" BackgroundColor="#33FFFFFF" HorizontalOptions="Start">
+                                <HorizontalStackLayout Spacing="4">
+                                    <Label x:Name="LevelLabel" Text="Level 1"
+                                           TextColor="White" FontSize="12" FontAttributes="Bold"/>
+                                    <Label Text="·" TextColor="White" FontSize="12" Opacity="0.7"/>
+                                    <Label x:Name="XPLabel" Text="0 XP"
+                                           TextColor="White" FontSize="12" Opacity="0.9"/>
+                                </HorizontalStackLayout>
+                            </Frame>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <!-- XP Progress -->
+                    <Border BackgroundColor="#22FFFFFF"
+                            Stroke="#33FFFFFF"
+                            StrokeShape="RoundRectangle 18"
+                            Padding="12,10">
+                        <VerticalStackLayout Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Level Progress"
+                                       TextColor="White"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       Opacity="0.9"/>
+                                <Label x:Name="XPProgressPercentLabel"
+                                       Grid.Column="1"
+                                       Text="0%"
+                                       TextColor="White"
+                                       FontSize="12"
+                                       FontAttributes="Bold"/>
+                            </Grid>
+                            <ProgressBar x:Name="XPProgress" Progress="0" ProgressColor="{StaticResource MobileAmber}"
+                                         BackgroundColor="#33FFFFFF"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label x:Name="XPProgressLabel"
+                                       Text="0 / 500 XP"
+                                       TextColor="White"
+                                       FontSize="11"
+                                       Opacity="0.85"/>
+                                <Label x:Name="XPRemainingLabel"
+                                       Grid.Column="1"
+                                       Text="500 XP left"
+                                       TextColor="White"
+                                       FontSize="11"
+                                       Opacity="0.85"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- Stats Row -->
+            <Frame Margin="16,16,16,0"
+                   Padding="20,16"
+                   CornerRadius="20"
+                   BackgroundColor="{StaticResource MobileSurface}"
+                   Shadow="{Shadow Brush=Black, Opacity=0.08, Radius=8}">
+                <Grid ColumnDefinitions="*,1,*,1,*">
+                    <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="4">
+                        <Label x:Name="GamesPlayedLabel" Text="0"
+                               FontSize="24" FontAttributes="Bold" TextColor="{StaticResource MobilePrimary}" HorizontalOptions="Center"/>
+                        <Label Text="Games" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <BoxView Grid.Column="1" BackgroundColor="{StaticResource Gray200}" WidthRequest="1" HeightRequest="40" VerticalOptions="Center"/>
+                    <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="4">
+                        <Label x:Name="StreakLabel" Text="0"
+                               FontSize="24" FontAttributes="Bold" HorizontalOptions="Center">
+                            <Label.TextColor><Color>#FF9A3C</Color></Label.TextColor>
+                        </Label>
+                        <Label Text="Streak 🔥" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <BoxView Grid.Column="3" BackgroundColor="{StaticResource Gray200}" WidthRequest="1" HeightRequest="40" VerticalOptions="Center"/>
+                    <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" Spacing="4">
+                        <Label x:Name="BadgesLabel" Text="0"
+                               FontSize="24" FontAttributes="Bold" HorizontalOptions="Center">
+                            <Label.TextColor><Color>#9D4EDD</Color></Label.TextColor>
+                        </Label>
+                        <Label Text="Badges" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Achievements / Badges -->
+            <Label Text="Achievements"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextPrimary}"
+                   Margin="20,20,20,8"/>
+
+            <Frame Margin="16,0,16,0"
+                   Padding="16"
+                   CornerRadius="20"
+                   BackgroundColor="{StaticResource MobileSurface}"
+                   Shadow="{Shadow Brush=Black, Opacity=0.08, Radius=8}">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="0" Text="🏆" FontSize="20" VerticalOptions="Center"/>
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center" Spacing="2">
+                        <Label x:Name="UnlockSummaryLabel" Text="0 / 0 Unlocked" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                        <Label Text="View all achievements" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="›" FontSize="20" TextColor="{StaticResource TextMuted}" VerticalOptions="Center" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnViewAchievementsTapped"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </Frame>
+
+            <!-- Goals and Habits -->
+            <Label Text="Goals &amp; Habits"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextPrimary}"
+                   Margin="20,20,20,8"/>
+
+            <Frame Margin="16,0,16,0"
+                   Padding="16"
+                   CornerRadius="20"
+                   BackgroundColor="{StaticResource MobileSurface}"
+                   Shadow="{Shadow Brush=Black, Opacity=0.08, Radius=8}">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0" Text="🎯" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center" Spacing="2">
+                            <Label x:Name="ActiveGoalsLabel" Text="0 Active Goals" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                            <Label Text="Track your progress" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <BoxView BackgroundColor="{StaticResource Gray200}" HeightRequest="1"/>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0" Text="✅" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center" Spacing="2">
+                            <Label x:Name="ActiveHabitsLabel" Text="0 Active Habits" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                            <Label x:Name="HabitStreakLabel" Text="Best streak: 0 days" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Settings -->
+            <Label Text="Settings"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextPrimary}"
+                   Margin="20,20,20,8"/>
+
+            <Frame Margin="16,0,16,0"
+                   Padding="0"
+                   CornerRadius="20"
+                   BackgroundColor="{StaticResource MobileSurface}"
+                   Shadow="{Shadow Brush=Black, Opacity=0.08, Radius=8}">
+                <VerticalStackLayout Spacing="0">
+
+                    <!-- Edit Profile setting -->
+                    <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0" Text="👤" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Edit Profile" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                            <Label x:Name="SettingsNameLabel" Text="Brain Trainer" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                        <Label Grid.Column="2" Text="›" FontSize="20" TextColor="{StaticResource TextMuted}" VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnEditProfileTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnEditProfileTapped"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <BoxView BackgroundColor="{StaticResource Gray100}" HeightRequest="1" Margin="20,0"/>
+
+                    <!-- Difficulty preference -->
+                    <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0" Text="🎯" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Default Difficulty" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                            <Label x:Name="DiffPrefLabel" Text="Adaptive" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                        <Label Grid.Column="2" Text="›" FontSize="20" TextColor="{StaticResource TextMuted}" VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnChangeDifficultyTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnChangeDifficultyTapped"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <BoxView BackgroundColor="{StaticResource Gray100}" HeightRequest="1" Margin="20,0"/>
+
+                    <!-- Notifications -->
+                    <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0" Text="🔔" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Notifications" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                            <Label Text="Daily challenge reminders" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                        <Switch x:Name="NotifSwitch" Grid.Column="2"
+                                IsToggled="True"
+                                ThumbColor="{StaticResource MobilePrimary}"
+                                Toggled="OnNotifToggled"/>
+                    </Grid>
+
+                    <BoxView BackgroundColor="{StaticResource Gray100}" HeightRequest="1" Margin="20,0"/>
+
+                    <!-- Haptics setting -->
+                    <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                        <Label Grid.Column="0" Text="📳" FontSize="20" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Haptic Feedback" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                            <Label Text="Vibrate on taps and game actions" FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                        <Switch x:Name="HapticsSwitch" Grid.Column="2" IsToggled="True" OnColor="{StaticResource MobilePrimary}" Toggled="OnHapticsToggled" VerticalOptions="Center"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Reset Progress (danger zone) -->
+            <Frame Margin="16,16,16,100"
+                   Padding="16,12"
+                   CornerRadius="16"
+                   BackgroundColor="#FFF5F5"
+                   BorderColor="#FFCCCC">
+                <Button Text="Reset All Progress"
+                        BackgroundColor="Transparent"
+                        TextColor="#FF4D6D"
+                        FontSize="14"
+                        Clicked="OnResetProgressClicked"/>
+            </Frame>
+
+            <!-- Log Out Button -->
+            <Frame Margin="16,0,16,100"
+                   Padding="16,12"
+                   CornerRadius="16"
+                   BackgroundColor="{StaticResource MobileSurface}"
+                   BorderColor="{StaticResource MobileStroke}">
+                <Button Text="Log Out"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource TextSecondary}"
+                        FontSize="14"
+                        Clicked="OnLogoutClicked"/>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

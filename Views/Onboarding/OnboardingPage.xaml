@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.Onboarding.OnboardingPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid>
+        <!-- Full gradient background -->
+        <BoxView x:Name="BgBox">
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="{StaticResource GradStart}" Offset="0"/>
+                    <GradientStop Color="{StaticResource MobilePrimary}" Offset="0.5"/>
+                    <GradientStop Color="{StaticResource GradEnd}" Offset="1"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- Decorative ellipses -->
+        <Ellipse WidthRequest="300" HeightRequest="300"
+                 HorizontalOptions="End" VerticalOptions="Start"
+                 Margin="0,-80,-80,0" Opacity="0.1">
+            <Ellipse.Fill><SolidColorBrush Color="White"/></Ellipse.Fill>
+        </Ellipse>
+        <Ellipse WidthRequest="200" HeightRequest="200"
+                 HorizontalOptions="Start" VerticalOptions="End"
+                 Margin="-60,0,0,-60" Opacity="0.08">
+            <Ellipse.Fill><SolidColorBrush Color="White"/></Ellipse.Fill>
+        </Ellipse>
+
+        <!-- Content -->
+        <Grid RowDefinitions="*,Auto,Auto" Padding="32">
+
+            <!-- Slide content (swipeable CarouselView) -->
+            <CarouselView Grid.Row="0"
+                          x:Name="SlidesCarousel"
+                          Loop="False"
+                          CurrentItemChanged="OnSlideChanged"
+                          VerticalOptions="FillAndExpand">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Spacing="24" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Label Text="{Binding Icon}"
+                                   FontSize="80"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="{Binding Title}"
+                                   TextColor="White"
+                                   FontSize="28"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding Description}"
+                                   TextColor="White"
+                                   FontSize="16"
+                                   Opacity="0.85"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="WordWrap"/>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+
+            <!-- Page indicators -->
+            <IndicatorView Grid.Row="1"
+                           x:Name="PageIndicator"
+                           IndicatorColor="#55FFFFFF"
+                           SelectedIndicatorColor="White"
+                           IndicatorSize="8"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,20"
+                           ItemsSource="{Binding Source={x:Reference SlidesCarousel}, Path=ItemsSource}"/>
+
+            <!-- Bottom buttons -->
+            <VerticalStackLayout Grid.Row="2" Spacing="16">
+
+                <!-- Setup name (visible on last slide) -->
+                <Frame x:Name="NameInputFrame"
+                       IsVisible="False"
+                       Padding="16,10"
+                       CornerRadius="16"
+                       BackgroundColor="#22FFFFFF">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="What should we call you?" TextColor="White" FontSize="14" Opacity="0.9"/>
+                        <Entry x:Name="NameEntry"
+                               Placeholder="Enter your name..."
+                               PlaceholderColor="#88FFFFFF"
+                               TextColor="White"
+                               FontSize="16"
+                               BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <!-- Skip -->
+                    <Button Grid.Column="0"
+                            x:Name="SkipBtn"
+                            Text="Skip"
+                            BackgroundColor="#22FFFFFF"
+                            TextColor="White"
+                            FontSize="16"
+                            CornerRadius="16"
+                            HeightRequest="52"
+                            Clicked="OnSkipClicked"/>
+
+                    <!-- Next / Get Started -->
+                    <Button Grid.Column="1"
+                            x:Name="NextBtn"
+                            Text="Next →"
+                            BackgroundColor="White"
+                            TextColor="{StaticResource MobilePrimaryDark}"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            CornerRadius="16"
+                            HeightRequest="52"
+                            Clicked="OnNextClicked"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

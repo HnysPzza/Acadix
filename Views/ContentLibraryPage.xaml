@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.ContentLibraryPage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20,20,20,120">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Text="←"
+                        Clicked="OnBackClicked"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        CornerRadius="22"
+                        BackgroundColor="{StaticResource MobileSurfaceRaised}"
+                        TextColor="{StaticResource TextPrimary}"
+                        FontSize="18" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="Content Library" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border Style="{StaticResource MobileHeroBorder}" Padding="20,18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource MobileAmber}" Offset="0"/>
+                        <GradientStop Color="{StaticResource MobileCoral}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="STUDY RESOURCES" FontSize="11" FontAttributes="Bold" TextColor="#FEF3C7" />
+                    <Label Text="Quick reference materials for your studies" FontSize="18" FontAttributes="Bold" TextColor="White" LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="Categories" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+            
+            <CollectionView x:Name="ContentCollection" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,12" Style="{StaticResource ModernCardBorder}" Padding="16">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnContentTapped" CommandParameter="{Binding Id}" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <Border BackgroundColor="{StaticResource MobileAmberMuted}" 
+                                        Stroke="Transparent" 
+                                        StrokeShape="RoundRectangle 16" 
+                                        WidthRequest="48" 
+                                        HeightRequest="48"
+                                        VerticalOptions="Start">
+                                    <Label Text="{Binding IconEmoji}" 
+                                           FontSize="24" 
+                                           HorizontalOptions="Center" 
+                                           VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="{Binding Title}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                    <Label Text="{Binding Description}" FontSize="12" TextColor="{StaticResource TextSecondary}" LineBreakMode="WordWrap" MaxLines="2" />
+                                    <Label Text="{Binding Category}" FontSize="11" TextColor="{StaticResource MobilePrimary}" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2" Text="→" FontSize="18" TextColor="{StaticResource MobilePrimary}" VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

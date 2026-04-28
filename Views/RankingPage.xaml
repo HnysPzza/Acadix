@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.RankingPage"
+             BackgroundColor="{StaticResource SurfaceAlt}"
+             Shell.NavBarIsVisible="False">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="0">
+                <Grid HeightRequest="150">
+                    <BoxView>
+                        <BoxView.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="{StaticResource MobilePrimaryDark}" Offset="0"/>
+                                <GradientStop Color="{StaticResource MobilePrimary}" Offset="1"/>
+                            </LinearGradientBrush>
+                        </BoxView.Background>
+                    </BoxView>
+                    <VerticalStackLayout Padding="24,54,24,20" Spacing="4">
+                        <Label Text="Rank"
+                               TextColor="White"
+                               FontSize="26"
+                               FontAttributes="Bold"/>
+                        <Label Text="Global Brain Score leaderboard"
+                               TextColor="White"
+                               FontSize="13"
+                               Opacity="0.82"/>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Border Margin="16,-22,16,0"
+                        Padding="18"
+                        BackgroundColor="{StaticResource MobileSurface}"
+                        Stroke="{StaticResource MobileStroke}"
+                        StrokeShape="RoundRectangle 18"
+                        Shadow="{Shadow Brush=Black, Opacity=0.10, Radius=14}">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                        <Border WidthRequest="52"
+                                HeightRequest="52"
+                                BackgroundColor="{StaticResource MobilePrimaryMuted}"
+                                Stroke="Transparent"
+                                StrokeShape="RoundRectangle 26">
+                            <Label x:Name="CurrentRankLabel"
+                                   Text="--"
+                                   TextColor="{StaticResource MobilePrimaryDark}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label x:Name="CurrentNameLabel"
+                                   Text="Your rank"
+                                   TextColor="{StaticResource TextPrimary}"
+                                   FontSize="16"
+                                   FontAttributes="Bold"/>
+                            <Label x:Name="CurrentSubtitleLabel"
+                                   Text="Syncing leaderboard..."
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="12"/>
+                        </VerticalStackLayout>
+                        <Label x:Name="CurrentScoreLabel"
+                               Grid.Column="2"
+                               Text="0"
+                               TextColor="{StaticResource MobilePrimary}"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <Grid Margin="20,22,20,8" ColumnDefinitions="*,Auto">
+                    <Label Text="Top Students"
+                           TextColor="{StaticResource TextPrimary}"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    <Button Grid.Column="1"
+                            Text="Retry"
+                            Clicked="OnRetryClicked"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource MobilePrimary}"
+                            FontSize="12"
+                            Padding="0"
+                            HeightRequest="32"/>
+                </Grid>
+
+                <Label x:Name="StatusLabel"
+                       Text=""
+                       IsVisible="False"
+                       Margin="20,0,20,8"
+                       TextColor="{StaticResource TextSecondary}"
+                       FontSize="13"
+                       LineBreakMode="WordWrap"/>
+
+                <CollectionView x:Name="LeaderboardCollection"
+                                Margin="16,0,16,24"
+                                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="14"
+                                    Margin="0,0,0,10"
+                                    BackgroundColor="{StaticResource MobileSurface}"
+                                    Stroke="{StaticResource MobileStroke}"
+                                    StrokeShape="RoundRectangle 16">
+                                <Grid ColumnDefinitions="42,*,Auto" ColumnSpacing="12">
+                                    <Label Text="{Binding Rank, StringFormat='#{0}'}"
+                                           TextColor="{StaticResource MobilePrimary}"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalOptions="Center"/>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <Label Text="{Binding DisplayName}"
+                                               TextColor="{StaticResource TextPrimary}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               LineBreakMode="TailTruncation"/>
+                                        <Label Text="{Binding Level, StringFormat='Level {0}'}"
+                                               TextColor="{StaticResource TextSecondary}"
+                                               FontSize="11"/>
+                                        <Label Text="{Binding StreakDays, StringFormat='{0} day streak'}"
+                                               TextColor="{StaticResource MobileSuccess}"
+                                               FontSize="11"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="2" Spacing="0" VerticalOptions="Center">
+                                        <Label Text="{Binding BrainScore}"
+                                               TextColor="{StaticResource MobilePrimaryDark}"
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               HorizontalTextAlignment="End"/>
+                                        <Label Text="Brain"
+                                               TextColor="{StaticResource TextMuted}"
+                                               FontSize="10"
+                                               HorizontalTextAlignment="End"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid x:Name="LoadingOverlay"
+              BackgroundColor="#66000000"
+              IsVisible="False">
+            <Border Padding="18"
+                    BackgroundColor="{StaticResource MobileSurface}"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 18"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                <VerticalStackLayout Spacing="12">
+                    <ActivityIndicator IsRunning="True" Color="{StaticResource MobilePrimary}"/>
+                    <Label Text="Loading ranks..."
+                           TextColor="{StaticResource TextPrimary}"
+                           FontSize="13"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

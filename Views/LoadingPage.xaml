@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.LoadingPage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="{StaticResource MobilePrimaryDark}"/>
+                    <GradientStop Offset="0.54" Color="{StaticResource MobilePrimary}"/>
+                    <GradientStop Offset="1" Color="{StaticResource MobileCanvasDeep}"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <VerticalStackLayout Padding="30"
+                             Spacing="28"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center">
+            <Grid WidthRequest="156" HeightRequest="156">
+                <Ellipse x:Name="OuterGlow"
+                         Fill="#22FFFFFF"
+                         Stroke="#44FFFFFF"
+                         StrokeThickness="1"/>
+
+                <Border x:Name="LogoMark"
+                        WidthRequest="104"
+                        HeightRequest="104"
+                        StrokeShape="RoundRectangle 32"
+                        StrokeThickness="1"
+                        Stroke="#66FFFFFF"
+                        BackgroundColor="#2AF7FBF8"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <Grid>
+                        <Label Text="A"
+                               FontSize="50"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                        <BoxView HeightRequest="6"
+                                 WidthRequest="42"
+                                 CornerRadius="3"
+                                 BackgroundColor="{StaticResource MobileAmber}"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="End"
+                                 Margin="0,0,0,22"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                <Label Text="Acadix"
+                       FontSize="34"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"/>
+                <Label x:Name="LoadingText"
+                       Text="Preparing your progress"
+                       FontSize="14"
+                       TextColor="#DDF7FBF8"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="10" WidthRequest="250">
+                <ProgressBar x:Name="LoadingProgress"
+                             Progress="0"
+                             ProgressColor="{StaticResource MobileAmber}"
+                             HeightRequest="5"
+                             BackgroundColor="#33FFFFFF"/>
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Syncing"
+                           FontSize="12"
+                           TextColor="#CFF7FBF8"/>
+                    <Label x:Name="PercentLabel"
+                           Grid.Column="1"
+                           Text="0%"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                </Grid>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.LearningHubPage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20,20,20,120">
+            <!-- Animated Header with floating particles -->
+            <Border x:Name="HeaderBorder" Style="{StaticResource MobileHeroBorder}" Padding="20,18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource GradStart}" Offset="0"/>
+                        <GradientStop Color="{StaticResource GradEnd}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <VerticalStackLayout Spacing="6" x:Name="HeaderContent">
+                        <Label Text="LEARNING HUB" TextColor="#DCE7FF" FontSize="11" FontAttributes="Bold" />
+                        <Label Text="Stay on top of coursework with a clearer daily snapshot" TextColor="White" FontSize="20" FontAttributes="Bold" LineBreakMode="WordWrap" />
+                        <Label x:Name="TopRecommendationLabel" Text="Track assignments, deadlines, and reminders in one place." TextColor="White" Opacity="0.82" FontSize="12" LineBreakMode="WordWrap" Margin="0,2,0,0" />
+                    </VerticalStackLayout>
+                    <!-- Floating decorative elements -->
+                    <Label x:Name="FloatEmoji1" Text="✨" FontSize="16" Opacity="0" TranslationX="280" TranslationY="-10"/>
+                    <Label x:Name="FloatEmoji2" Text="💡" FontSize="14" Opacity="0" TranslationX="260" TranslationY="40"/>
+                </Grid>
+            </Border>
+
+            <Label x:Name="ToolsLabel" Text="Study tools" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" Margin="0,8,0,0" />
+
+            <!-- Tool Cards with Animations -->
+            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" ColumnSpacing="12" RowSpacing="12">
+                <!-- Planner Card -->
+                <Border x:Name="PlannerCard" Padding="16" MinimumHeightRequest="140" Style="{StaticResource ModernCardBorder}">
+                    <VerticalStackLayout Spacing="10">
+                        <Border x:Name="PlannerIconBg" Style="{StaticResource MobileIconChipBorder}" HorizontalOptions="Start">
+                            <Label x:Name="PlannerIcon" Text="📋" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Academic Planner" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <Button Text="Open planner" Clicked="OnOpenPlannerClicked" BackgroundColor="{StaticResource MobilePrimaryMuted}" TextColor="{StaticResource MobilePrimaryDark}" CornerRadius="18" HeightRequest="40" FontAttributes="Bold" Margin="0,4,0,0" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Guidance Card -->
+                <Border x:Name="GuidanceCard" Grid.Column="1" Padding="16" MinimumHeightRequest="140" Style="{StaticResource ModernCardBorder}">
+                    <VerticalStackLayout Spacing="10">
+                        <Border x:Name="GuidanceIconBg" Style="{StaticResource MobileIconChipBorder}" BackgroundColor="#FFE4D9" HorizontalOptions="Start">
+                            <Label x:Name="GuidanceIcon" Text="🎓" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Academic Guidance" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <Button Text="Open guidance" Clicked="OnOpenGuidanceClicked" BackgroundColor="#FFE4D9" TextColor="#9F3527" CornerRadius="18" HeightRequest="40" FontAttributes="Bold" Margin="0,4,0,0" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Library Card -->
+                <Border x:Name="LibraryCard" Grid.Row="1" Padding="16" MinimumHeightRequest="140" Style="{StaticResource ModernCardBorder}">
+                    <VerticalStackLayout Spacing="10">
+                        <Border x:Name="LibraryIconBg" Style="{StaticResource MobileIconChipBorder}" BackgroundColor="#FFF0C2" HorizontalOptions="Start">
+                            <Label x:Name="LibraryIcon" Text="📖" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Content Library" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <Button Text="Browse library" Clicked="OnOpenLibraryClicked" BackgroundColor="#FFF0C2" TextColor="#7A4B00" CornerRadius="18" HeightRequest="40" FontAttributes="Bold" Margin="0,4,0,0" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Courses Card -->
+                <Border x:Name="CoursesCard" Grid.Row="1" Grid.Column="1" Padding="16" MinimumHeightRequest="140" Style="{StaticResource ModernCardBorder}">
+                    <VerticalStackLayout Spacing="10">
+                        <Border x:Name="CoursesIconBg" Style="{StaticResource MobileIconChipBorder}" BackgroundColor="#E4E8FF" HorizontalOptions="Start">
+                            <Label x:Name="CoursesIcon" Text="📚" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Courses" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <Button Text="Browse courses" Clicked="OnOpenCoursesClicked" BackgroundColor="#E4E8FF" TextColor="{StaticResource MobileIndigo}" CornerRadius="18" HeightRequest="40" FontAttributes="Bold" Margin="0,4,0,0" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Quick Stats Row with Animation -->
+            <Border x:Name="StatsBorder" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 24" Padding="16" BackgroundColor="{StaticResource MobileSurfaceRaised}">
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                        <Label x:Name="DailyStreakLabel" Text="🔥 0" FontSize="20" FontAttributes="Bold" TextColor="#FF6B6B" HorizontalOptions="Center"/>
+                        <Label Text="Day Streak" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="4">
+                        <Label x:Name="TasksDoneLabel" Text="✅ 0" FontSize="20" FontAttributes="Bold" TextColor="#10B981" HorizontalOptions="Center"/>
+                        <Label Text="Tasks Done" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="4">
+                        <Label x:Name="MinutesLearnedLabel" Text="⏱️ 0" FontSize="20" FontAttributes="Bold" TextColor="#4361EE" HorizontalOptions="Center"/>
+                        <Label Text="Minutes" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

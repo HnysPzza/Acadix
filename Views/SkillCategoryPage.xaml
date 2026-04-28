@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.SkillCategoryPage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header -->
+        <Grid Grid.Row="0" x:Name="HeaderGrid" HeightRequest="200">
+            <BoxView x:Name="HeaderBg" CornerRadius="0,0,30,30"/>
+            <Ellipse WidthRequest="140" HeightRequest="140"
+                     HorizontalOptions="End" VerticalOptions="Start"
+                     Margin="0,-30,-40,0" Opacity="0.15">
+                <Ellipse.Fill><SolidColorBrush Color="White"/></Ellipse.Fill>
+            </Ellipse>
+            <Grid Padding="20,50,20,20" RowDefinitions="Auto,Auto,Auto,Auto">
+                <HorizontalStackLayout Grid.Row="0" Spacing="8">
+                    <Label Text="←" TextColor="White" FontSize="22">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBackTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Text="Back" TextColor="White" FontSize="16" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBackTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+                <Label Grid.Row="1" x:Name="CategoryIconLabel" Text="🧠" FontSize="40" Margin="0,8,0,0"/>
+                <Label Grid.Row="2" x:Name="CategoryNameLabel" Text="Memory" TextColor="White" FontSize="28" FontAttributes="Bold"/>
+                <HorizontalStackLayout Grid.Row="3" Spacing="12" Margin="0,4,0,0">
+                    <Label x:Name="GamesPlayedLabel" Text="0 games played" TextColor="White" FontSize="12" Opacity="0.85"/>
+                    <Label Text="•" TextColor="White" FontSize="12" Opacity="0.6"/>
+                    <Label x:Name="HighScoreLabel" Text="Best: 0" TextColor="White" FontSize="12" Opacity="0.85"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Grid>
+
+        <!-- Game List -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16,16,16,100" Spacing="12">
+
+                <!-- Difficulty Selector -->
+                <Frame Padding="16,12" CornerRadius="24" BackgroundColor="{StaticResource MobileSurface}" BorderColor="{StaticResource MobileStroke}"
+                       Shadow="{Shadow Brush=Black, Opacity=0.06, Radius=6}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Select Difficulty" FontSize="14" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}"/>
+                        <HorizontalStackLayout Spacing="8" x:Name="DifficultyStack">
+                            <Frame x:Name="EasyBtn" Padding="14,8" CornerRadius="20" BackgroundColor="{StaticResource MobilePrimary}">
+                                <Label Text="Easy" TextColor="White" FontSize="13">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnEasyTapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnEasyTapped"/>
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                            <Frame x:Name="MediumBtn" Padding="14,8" CornerRadius="20" BackgroundColor="{StaticResource MobileSurfaceRaised}">
+                                <Label Text="Medium" TextColor="{StaticResource TextSecondary}" FontSize="13">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnMediumTapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnMediumTapped"/>
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                            <Frame x:Name="HardBtn" Padding="14,8" CornerRadius="20" BackgroundColor="{StaticResource MobileSurfaceRaised}">
+                                <Label Text="Hard" TextColor="{StaticResource TextSecondary}" FontSize="13">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnHardTapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnHardTapped"/>
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                            <Frame x:Name="AdaptiveBtn" Padding="14,8" CornerRadius="20" BackgroundColor="{StaticResource MobileSurfaceRaised}">
+                                <Label Text="Adaptive" TextColor="{StaticResource TextSecondary}" FontSize="13">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnAdaptiveTapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAdaptiveTapped"/>
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Games list -->
+                <Label Text="Games" FontSize="16" FontAttributes="Bold"
+                       TextColor="{StaticResource TextPrimary}" Margin="4,4,0,0"/>
+
+                <VerticalStackLayout x:Name="GamesStack" Spacing="12"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

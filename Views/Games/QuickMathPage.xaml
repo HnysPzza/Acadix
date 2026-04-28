@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AcadsJulie.ViewModels"
+             xmlns:controls="clr-namespace:AcadsJulie.Controls"
+             x:Class="AcadsJulie.Views.Games.QuickMathPage"
+             x:DataType="viewmodels:QuickMathViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#1A1A2E">
+
+    <ContentPage.Resources>
+        <Style x:Key="GlassCardStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#22FFFFFF" />
+            <Setter Property="Stroke" Value="#33FFFFFF" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="16" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background Gradient -->
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#FF9A3C" Offset="0"/>
+                    <GradientStop Color="#FF6B6B" Offset="1"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- Decorative circles -->
+        <Ellipse WidthRequest="200" HeightRequest="200"
+                 HorizontalOptions="End" VerticalOptions="Start"
+                 Margin="0,-50,-60,0" Opacity="0.1">
+            <Ellipse.Fill><SolidColorBrush Color="White"/></Ellipse.Fill>
+        </Ellipse>
+
+        <!-- Game Interface -->
+        <Grid RowDefinitions="Auto, *">
+            
+            <!-- Top Bar / HUD -->
+            <VerticalStackLayout Grid.Row="0" Spacing="16" Padding="20,40,20,10">
+                <Grid ColumnDefinitions="Auto, *">
+                    <Button Grid.Column="0" Text="←" FontSize="20" FontAttributes="Bold"
+                            BackgroundColor="#22FFFFFF" TextColor="White"
+                            CornerRadius="12" WidthRequest="44" HeightRequest="44"
+                            Clicked="OnBackClicked"/>
+                    <Label Grid.Column="1" Text="Quick Math" TextColor="White" 
+                           FontSize="20" FontAttributes="Bold"
+                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    <Border Style="{StaticResource GlassCardStyle}" Padding="4,6">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Score" TextColor="#B0B0CC" FontSize="11" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                            <Label Text="{Binding Score}" TextColor="White" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource GlassCardStyle}" Padding="4,6">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Time" TextColor="#B0B0CC" FontSize="11" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                            <!-- Color turns red if < 10 handled by DataTrigger or implicit style -->
+                            <Label Text="{Binding TimeLeft, StringFormat='{0}s'}" TextColor="White" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" LineBreakMode="NoWrap">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding TimeLeft}" Value="10">
+                                        <Setter Property="TextColor" Value="#FF6B6B" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource GlassCardStyle}" Padding="4,6">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Solved" TextColor="#B0B0CC" FontSize="11" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                            <Label Text="{Binding Solved}" TextColor="White" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+                
+                <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                    <Label Text="{Binding Level, StringFormat='Level {0}'}" TextColor="#06D6A0" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Label Text="{Binding Combo, StringFormat='Combo: x{0}'}" TextColor="White" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
+                        <Label Text="{Binding ComboStars}" TextColor="#FFB347" FontSize="16" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Game Content -->
+            <VerticalStackLayout Grid.Row="1" Spacing="24" Padding="20,10,20,40" VerticalOptions="Center">
+                
+                <!-- Problem Card -->
+                <Border Style="{StaticResource GlassCardStyle}" Padding="0" Margin="0,0,0,16">
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="{Binding ProblemExpression}" 
+                               TextColor="White" FontSize="42" FontAttributes="Bold" 
+                               HorizontalTextAlignment="Center" Margin="0,30,0,30" MinimumHeightRequest="80" VerticalTextAlignment="Center">
+                            <Label.Shadow>
+                                <Shadow Brush="Black" Opacity="0.3" Radius="4" Offset="0,2"/>
+                            </Label.Shadow>
+                        </Label>
+                        
+                        <!-- Problem Timer Bar -->
+                        <controls:SpeedBarControl HeightRequest="6" HorizontalOptions="Fill" Progress="{Binding ProgressValue}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- 2x2 Options Grid -->
+                <Grid x:Name="OptionsGrid" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" RowSpacing="16" ColumnSpacing="16">
+                    <!-- Dynamic Answer Buttons -->
+                </Grid>
+
+            </VerticalStackLayout>
+
+        </Grid>
+
+        <!-- Feedback Flash label -->
+        <AbsoluteLayout>
+            <Label x:Name="FeedbackFlash" Text="+PTS ⚡" TextColor="#06D6A0" FontSize="36" FontAttributes="Bold"
+                   Opacity="0" AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1" AbsoluteLayout.LayoutFlags="PositionProportional" />
+        </AbsoluteLayout>
+
+        <!-- Result Overlay -->
+        <Grid IsVisible="{Binding IsGameOver}" BackgroundColor="#B3000000">
+            <Border Style="{StaticResource GlassCardStyle}" Margin="40" Padding="30" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="Time's Up!" TextColor="White" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Score, StringFormat='Score: {0}'}" TextColor="#FF9A3C" FontSize="36" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Solved" TextColor="#B0B0CC" FontSize="14" HorizontalOptions="Center"/>
+                            <Label Text="{Binding Solved}" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border Stroke="#06D6A0" StrokeThickness="2" StrokeShape="RoundRectangle 12" BackgroundColor="#2206D6A0" Margin="0,10,0,0">
+                        <Button Text="Play Again" TextColor="White" FontSize="16" FontAttributes="Bold" BackgroundColor="Transparent" Command="{Binding RestartGameCommand}" Padding="0,14" Clicked="OnPlayAgainClicked"/>
+                    </Border>
+                    <Button Text="Back to Menu" TextColor="#B0B0CC" FontSize="14" BackgroundColor="Transparent" Clicked="OnBackClicked"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- Countdown Overlay -->
+        <Grid IsVisible="{Binding ShowCountdown}" BackgroundColor="#CC000000">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <Label x:Name="CountdownLabel" Text="{Binding CountdownNumber}" TextColor="White" FontSize="96" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label Text="Get Ready..." TextColor="#B0B0CC" FontSize="24" HorizontalOptions="Center" Margin="0,20,0,0"/>
+            </VerticalStackLayout>
+        </Grid>
+
+    </Grid>
+</ContentPage>

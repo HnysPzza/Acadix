@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AcadsJulie.ViewModels"
+             xmlns:ske="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI.Maui"
+             x:Class="AcadsJulie.Views.Games.QuestionView"
+             x:DataType="viewmodels:QuestionViewModel"
+             BackgroundColor="{StaticResource GamifiedPageBg}">
+
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="16" Padding="16">
+        <!-- Thick progress with gloss -->
+        <Grid Grid.Row="0" HeightRequest="20">
+            <Border Style="{StaticResource GamifiedCardBorder}"
+                    StrokeThickness="1"
+                    BackgroundColor="#EEF2F7"
+                    StrokeShape="RoundRectangle 10" />
+            <ProgressBar Progress="{Binding Progress}"
+                         ProgressColor="{StaticResource GamifiedBlue}"
+                         BackgroundColor="Transparent"
+                         HeightRequest="14"
+                         Margin="3" />
+            <Border Background="{StaticResource GamifiedProgressGloss}"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 10"
+                    Margin="3" />
+        </Grid>
+
+        <!-- Mascot + Speech Bubble -->
+        <Grid Grid.Row="1" ColumnDefinitions="2*,3*" ColumnSpacing="12">
+            <Border Grid.Column="0" Style="{StaticResource GamifiedCardBorder}" Padding="8">
+                <ske:SKLottieView Source="{Binding ParrotAnimationSource}"
+                                  RepeatCount="-1"
+                                  RepeatMode="Restart"
+                                  VerticalOptions="Center"
+                                  HorizontalOptions="Center"
+                                  HeightRequest="128"
+                                  WidthRequest="128" />
+            </Border>
+
+            <Grid Grid.Column="1" ColumnDefinitions="Auto,*">
+                <Path Grid.Column="0"
+                      Fill="{StaticResource GamifiedCardBg}"
+                      Stroke="{StaticResource GamifiedCardStroke}"
+                      StrokeThickness="1"
+                      HorizontalOptions="Start"
+                      VerticalOptions="Center"
+                      Margin="0,0,-1,0"
+                      Data="M 18,16 L 0,24 L 18,32 Z"
+                      WidthRequest="18"
+                      HeightRequest="48"/>
+
+                <Border Grid.Column="1" Style="{StaticResource GamifiedSpeechBubbleBorder}">
+                    <Label Text="{Binding QuestionText}"
+                           Style="{StaticResource GamifiedBodyLabel}"
+                           LineBreakMode="WordWrap" />
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- Answers -->
+        <VerticalStackLayout Grid.Row="2" Spacing="12">
+            <Border Style="{StaticResource GamifiedAnswerBorder}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectAnswerCommand}" CommandParameter="{Binding Answers[0]}" />
+                </Border.GestureRecognizers>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding Answers[0].IsCorrectState}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedGreenSoft}" />
+                        <Setter Property="Stroke" Value="{StaticResource GamifiedGreenStroke}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding Answers[0].IsIncorrectState}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedRedSoft}" />
+                        <Setter Property="Stroke" Value="{StaticResource GamifiedRedStroke}" />
+                    </DataTrigger>
+                </Border.Triggers>
+                <Label Text="{Binding Answers[0].Text}" Style="{StaticResource GamifiedBodyLabel}" />
+            </Border>
+
+            <Border Style="{StaticResource GamifiedAnswerBorder}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectAnswerCommand}" CommandParameter="{Binding Answers[1]}" />
+                </Border.GestureRecognizers>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding Answers[1].IsCorrectState}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedGreenSoft}" />
+                        <Setter Property="Stroke" Value="{StaticResource GamifiedGreenStroke}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding Answers[1].IsIncorrectState}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedRedSoft}" />
+                        <Setter Property="Stroke" Value="{StaticResource GamifiedRedStroke}" />
+                    </DataTrigger>
+                </Border.Triggers>
+                <Label Text="{Binding Answers[1].Text}" Style="{StaticResource GamifiedBodyLabel}" />
+            </Border>
+
+            <Border Style="{StaticResource GamifiedAnswerBorder}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectAnswerCommand}" CommandParameter="{Binding Answers[2]}" />
+                </Border.GestureRecognizers>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding Answers[2].IsCorrectState}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedGreenSoft}" />
+                        <Setter Property="Stroke" Value="{StaticResource GamifiedGreenStroke}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding Answers[2].IsIncorrectState}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedRedSoft}" />
+                        <Setter Property="Stroke" Value="{StaticResource GamifiedRedStroke}" />
+                    </DataTrigger>
+                </Border.Triggers>
+                <Label Text="{Binding Answers[2].Text}" Style="{StaticResource GamifiedBodyLabel}" />
+            </Border>
+
+            <Border Style="{StaticResource GamifiedAnswerBorder}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectAnswerCommand}" CommandParameter="{Binding Answers[3]}" />
+                </Border.GestureRecognizers>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding Answers[3].IsCorrectState}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedGreenSoft}" />
+                        <Setter Property="Stroke" Value="{StaticResource GamifiedGreenStroke}" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding Answers[3].IsIncorrectState}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedRedSoft}" />
+                        <Setter Property="Stroke" Value="{StaticResource GamifiedRedStroke}" />
+                    </DataTrigger>
+                </Border.Triggers>
+                <Label Text="{Binding Answers[3].Text}" Style="{StaticResource GamifiedBodyLabel}" />
+            </Border>
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

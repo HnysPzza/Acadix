@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.StudyAssistantPage"
+             Title="Assistant"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20,20,20,16" RowSpacing="18">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+            <Button Text="←"
+                    Clicked="OnBackClicked"
+                    WidthRequest="44"
+                    HeightRequest="44"
+                    CornerRadius="22"
+                    BackgroundColor="{StaticResource MobileSurfaceRaised}"
+                    TextColor="{StaticResource TextPrimary}"
+                    FontSize="18" />
+            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                <Label Text="Study Assistant" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                <Label Text="Ask for study support, planning help, and recommendation explanations." FontSize="13" TextColor="{StaticResource TextSecondary}" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <Border Grid.Row="1" Style="{StaticResource ModernCardBorder}" Padding="18">
+            <VerticalStackLayout Spacing="6">
+                <Label Text="ACADEMIC SUPPORT" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource MobilePrimary}" />
+                <Label Text="A lightweight study companion for testing" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                <Label Text="Ask about study plans, assignments, strand choices, or course suggestions using your current app data." FontSize="13" LineHeight="1.25" TextColor="{StaticResource TextSecondary}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource ModernCardBorder}" Padding="10" BackgroundColor="{StaticResource MobileSurfaceRaised}">
+            <CollectionView x:Name="MessagesCollection" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="2,4">
+                        <Border Padding="14"
+                                MaximumWidthRequest="320"
+                                HorizontalOptions="Start"
+                                BackgroundColor="{StaticResource MobileSurface}"
+                                Stroke="{StaticResource MobileStroke}"
+                                StrokeShape="RoundRectangle 18">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="{Binding Text}" LineBreakMode="WordWrap" TextColor="{StaticResource TextPrimary}" />
+                                <Label Text="{Binding TimestampLabel}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                            </VerticalStackLayout>
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsUser}" Value="True">
+                                    <Setter Property="HorizontalOptions" Value="End" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource MobilePrimaryMuted}" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
+
+        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <Border BackgroundColor="{StaticResource MobileSurfaceRaised}" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 20" Padding="12,4">
+                <Entry x:Name="MessageEntry" Placeholder="Ask about assignments, study tips, or strand/course suggestions" ReturnType="Send" Completed="OnSendClicked" />
+            </Border>
+            <Button Grid.Column="1" Text="Send" Clicked="OnSendClicked" BackgroundColor="{StaticResource MobilePrimary}" TextColor="White" CornerRadius="20" FontAttributes="Bold" HeightRequest="44" />
+        </Grid>
+    </Grid>
+</ContentPage>

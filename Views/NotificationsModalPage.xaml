@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.NotificationsModalPage"
+             BackgroundColor="#B3000000">
+
+    <Grid>
+        <!-- Background tap to dismiss -->
+        <BoxView BackgroundColor="Transparent">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseTapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- Modal Box -->
+        <Frame VerticalOptions="End" HorizontalOptions="Fill"
+               Margin="0,60,0,-24" Padding="0" CornerRadius="32"
+               HeightRequest="500"
+               BackgroundColor="{StaticResource MobileCanvas}" HasShadow="True">
+               
+            <VerticalStackLayout Spacing="0">
+                <!-- Drag Handle -->
+                <BoxView HeightRequest="4" WidthRequest="40" BackgroundColor="{StaticResource MobileStroke}" CornerRadius="2" HorizontalOptions="Center" Margin="0,16,0,16"/>
+
+                <Grid Padding="24,0,24,16">
+                    <Label Text="Notifications"
+                           TextColor="{StaticResource TextPrimary}"
+                           FontSize="24" FontAttributes="Bold" HorizontalOptions="Start"/>
+                    <Label Text="Done" TextColor="{StaticResource MobilePrimary}" FontAttributes="Bold" FontSize="16" HorizontalOptions="End" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCloseTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <ScrollView>
+                    <VerticalStackLayout Padding="24,8" Spacing="16" x:Name="NotificationList">
+                        
+                        <!-- Dynamic notification content will be injected by code-behind -->
+                        
+                        <!-- Example empty state -->
+                        <Label x:Name="EmptyStateLabel" Text="You're all caught up! ✨" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" FontSize="16" Margin="0,40,0,0" IsVisible="False"/>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>

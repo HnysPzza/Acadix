@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AcadsJulie.ViewModels"
+             x:Class="AcadsJulie.Views.Games.ReactionTapPage"
+             x:DataType="viewmodels:ReactionTapViewModel"
+             BackgroundColor="#1A1A2E"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <Style x:Key="GlassCardStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#22FFFFFF" />
+            <Setter Property="Stroke" Value="#33FFFFFF" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape">
+                <Setter.Value><RoundRectangle CornerRadius="16" /></Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background gradient -->
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#FF6B6B" Offset="0"/>
+                    <GradientStop Color="#FF9A3C" Offset="1"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- Game UI -->
+        <Grid RowDefinitions="Auto,*" Padding="16" RowSpacing="16">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
+                <Button Grid.Column="0" Text="←" FontSize="20" FontAttributes="Bold"
+                        BackgroundColor="#22FFFFFF" TextColor="White"
+                        CornerRadius="12" WidthRequest="44" HeightRequest="44"
+                        Clicked="OnBackClicked"/>
+                <Border Grid.Column="1" Style="{StaticResource GlassCardStyle}" Padding="16" Margin="8,0,0,0">
+                    <Label Text="{Binding HudText}" TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </Border>
+            </Grid>
+
+            <Border Grid.Row="1" BackgroundColor="{Binding BoxColor}" StrokeShape="RoundRectangle 20" Margin="0,0,0,16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding TapAreaCommand}" />
+                </Border.GestureRecognizers>
+                <Label Text="{Binding InstructionText}" TextColor="White" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Border>
+        </Grid>
+
+        <!-- Game Over Overlay -->
+        <Grid IsVisible="{Binding IsGameOver}" BackgroundColor="#B3000000">
+            <Border Style="{StaticResource GlassCardStyle}" Margin="40" Padding="30" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="⚡ Reaction Tap" TextColor="#B0B0CC" FontSize="16" HorizontalOptions="Center"/>
+                    <Label Text="Time's Up!" TextColor="White" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Score, StringFormat='Score: {0}'}" TextColor="#FF9A3C" FontSize="36" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Border Stroke="#FF9A3C" StrokeThickness="2" StrokeShape="RoundRectangle 12" BackgroundColor="#22FF9A3C" Margin="0,10,0,0">
+                        <Button Text="Play Again" TextColor="White" FontSize="16" FontAttributes="Bold" BackgroundColor="Transparent" Command="{Binding RestartGameCommand}" Padding="0,14" Clicked="OnPlayAgainClicked"/>
+                    </Border>
+                    <Button Text="Back to Menu" TextColor="#B0B0CC" FontSize="14" BackgroundColor="Transparent" Clicked="OnBackClicked"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
+

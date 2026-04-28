@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.RegisterPage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+    <Grid>
+        <BoxView Opacity="0.96">
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="{StaticResource MobilePrimaryDark}" Offset="0"/>
+                    <GradientStop Color="{StaticResource MobilePrimary}" Offset="0.48"/>
+                    <GradientStop Color="{StaticResource MobileCanvas}" Offset="1"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <ScrollView>
+            <Grid Padding="22,42,22,26"
+                  RowDefinitions="Auto,*"
+                  RowSpacing="22">
+                <VerticalStackLayout Spacing="16">
+                    <Border WidthRequest="58"
+                            HeightRequest="58"
+                            StrokeShape="RoundRectangle 18"
+                            StrokeThickness="1"
+                            Stroke="#55FFFFFF"
+                            BackgroundColor="#22FFFFFF"
+                            HorizontalOptions="Start">
+                        <Grid>
+                            <Label Text="A"
+                                   FontSize="28"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                            <BoxView HeightRequest="4"
+                                     WidthRequest="24"
+                                     CornerRadius="2"
+                                     BackgroundColor="{StaticResource MobileAmber}"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="End"
+                                     Margin="0,0,0,12"/>
+                        </Grid>
+                    </Border>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Create your Acadix profile"
+                               FontSize="31"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               LineBreakMode="WordWrap"/>
+                        <Label Text="Your local progress stays with you and syncs after sign up."
+                               FontSize="14"
+                               LineHeight="1.2"
+                               TextColor="#DDF7FBF8"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <Border Grid.Row="1"
+                        Padding="20"
+                        BackgroundColor="{StaticResource MobileSurface}"
+                        Stroke="{StaticResource MobileStroke}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 28"
+                        Shadow="{Shadow Brush=#33121A1C, Offset='0,14', Radius=26, Opacity=0.18}">
+                    <VerticalStackLayout Spacing="14">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Account details"
+                                   FontSize="23"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}"/>
+                            <Label Text="Use a real email so your progress can be restored."
+                                   FontSize="13"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Name" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}"/>
+                            <Border Style="{StaticResource MobileInputBorder}">
+                                <Entry x:Name="NameEntry"
+                                       Placeholder="Your name"
+                                       ReturnType="Next"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Email" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}"/>
+                            <Border Style="{StaticResource MobileInputBorder}">
+                                <Entry x:Name="EmailEntry"
+                                       Keyboard="Email"
+                                       Placeholder="you@example.com"
+                                       ReturnType="Next"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Password" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}"/>
+                            <Border Style="{StaticResource MobileInputBorder}">
+                                <Entry x:Name="PasswordEntry"
+                                       IsPassword="True"
+                                       Placeholder="At least 6 characters"
+                                       ReturnType="Next"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Confirm password" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}"/>
+                            <Border Style="{StaticResource MobileInputBorder}">
+                                <Entry x:Name="ConfirmPasswordEntry"
+                                       IsPassword="True"
+                                       Placeholder="Confirm password"
+                                       ReturnType="Go"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <Border x:Name="ErrorBanner"
+                                IsVisible="False"
+                                Padding="12,10"
+                                BackgroundColor="{StaticResource MobileCoralMuted}"
+                                Stroke="{StaticResource MobileCoral}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 16">
+                            <Label x:Name="ErrorLabel"
+                                   TextColor="{StaticResource Danger}"
+                                   FontSize="12"
+                                   LineBreakMode="WordWrap"/>
+                        </Border>
+
+                        <Button x:Name="RegisterButton"
+                                Text="Create account"
+                                Clicked="OnRegisterClicked"
+                                BackgroundColor="{StaticResource MobilePrimary}"
+                                TextColor="White"
+                                CornerRadius="18"
+                                HeightRequest="52"
+                                FontAttributes="Bold"/>
+
+                        <Button x:Name="GoogleButton"
+                                Text="Continue with Google"
+                                Clicked="OnGoogleClicked"
+                                BackgroundColor="{StaticResource MobileSurfaceRaised}"
+                                TextColor="{StaticResource MobilePrimaryDark}"
+                                BorderColor="{StaticResource MobileStroke}"
+                                BorderWidth="1"
+                                CornerRadius="18"
+                                HeightRequest="50"
+                                FontAttributes="Bold"/>
+
+                        <Button Text="Back to login"
+                                Clicked="OnLoginClicked"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource MobilePrimary}"
+                                FontAttributes="Bold"
+                                HeightRequest="44"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

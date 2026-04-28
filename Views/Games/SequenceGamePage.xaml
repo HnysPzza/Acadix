@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AcadsJulie.ViewModels"
+             xmlns:controls="clr-namespace:AcadsJulie.Controls"
+             x:Class="AcadsJulie.Views.Games.SequenceGamePage"
+             x:DataType="viewmodels:SequenceGameViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource MobileInk}">
+
+    <ContentPage.Resources>
+        <Style x:Key="GlassCardStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#22FFFFFF" />
+            <Setter Property="Stroke" Value="#33FFFFFF" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="16" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background Gradient -->
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="{StaticResource MobileCoral}" Offset="0"/>
+                    <GradientStop Color="{StaticResource MobileIndigo}" Offset="1"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- Decorative circles -->
+        <Ellipse WidthRequest="200" HeightRequest="200"
+                 HorizontalOptions="End" VerticalOptions="Start"
+                 Margin="0,-50,-60,0" Opacity="0.1">
+            <Ellipse.Fill><SolidColorBrush Color="White"/></Ellipse.Fill>
+        </Ellipse>
+
+        <Grid RowDefinitions="Auto, *">
+            
+            <!-- Top Bar / HUD -->
+            <VerticalStackLayout Grid.Row="0" Spacing="16" Padding="20,40,20,10">
+                <Grid ColumnDefinitions="Auto, *">
+                    <Button Grid.Column="0" Text="←" FontSize="20" FontAttributes="Bold"
+                            BackgroundColor="#22FFFFFF" TextColor="White"
+                            CornerRadius="18" WidthRequest="44" HeightRequest="44"
+                            Clicked="OnBackClicked"/>
+                    <Label Grid.Column="1" Text="Next in Sequence" TextColor="White" 
+                           FontSize="20" FontAttributes="Bold"
+                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    <Border Style="{StaticResource GlassCardStyle}" Padding="4,6">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Score" TextColor="#B0B0CC" FontSize="11" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                            <Label Text="{Binding Score}" TextColor="White" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource GlassCardStyle}" Padding="4,6">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Round" TextColor="#B0B0CC" FontSize="11" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                            <Label Text="{Binding Round, StringFormat='{0}/10'}" TextColor="White" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource GlassCardStyle}" Padding="4,6">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Correct" TextColor="#B0B0CC" FontSize="11" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                            <Label Text="{Binding CorrectCount}" TextColor="White" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" LineBreakMode="NoWrap"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Progress Bar -->
+                <ProgressBar Progress="{Binding RoundProgress}" BackgroundColor="#33FFFFFF" ProgressColor="{StaticResource MobileAmber}" HeightRequest="6"/>
+            </VerticalStackLayout>
+
+            <!-- Game Content -->
+            <VerticalStackLayout Grid.Row="1" Spacing="24" Padding="20,10,20,40" VerticalOptions="Center">
+                
+                <!-- Sequence Card -->
+                <Border Style="{StaticResource GlassCardStyle}" Padding="16,24" Margin="0,0,0,16">
+                    <VerticalStackLayout Spacing="16">
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" HorizontalOptions="Center">
+                            <HorizontalStackLayout x:Name="SequenceStack" Spacing="8" VerticalOptions="Center" />
+                        </ScrollView>
+
+                        <Label Text="{Binding HintText}" IsVisible="{Binding ShowHint}"
+                               TextColor="{StaticResource MobileAmber}" FontSize="14" FontAttributes="Italic"
+                               HorizontalTextAlignment="Center" Margin="0,10,0,0"/>
+
+                        <!-- Timer Bar -->
+                        <controls:SpeedBarControl HeightRequest="6" HorizontalOptions="Fill" Progress="{Binding ProgressValue}" Margin="0,10,0,0"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- 2x2 Options Grid -->
+                <Grid x:Name="OptionsGrid" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" RowSpacing="16" ColumnSpacing="16">
+                    <!-- Buttons will be populated from code-behind -->
+                </Grid>
+
+            </VerticalStackLayout>
+
+        </Grid>
+
+        <!-- XP Flash overlay -->
+        <AbsoluteLayout>
+            <Label x:Name="XpFlash" Text="+150 ⚡" TextColor="{StaticResource MobileSuccess}" FontSize="36" FontAttributes="Bold"
+                   Opacity="0" AbsoluteLayout.LayoutBounds="0.5, 0.4, -1, -1" AbsoluteLayout.LayoutFlags="PositionProportional" />
+        </AbsoluteLayout>
+
+        <!-- Result Overlay -->
+        <Grid IsVisible="{Binding IsGameOver}" BackgroundColor="#B3000000">
+            <Border Style="{StaticResource GlassCardStyle}" Margin="40" Padding="30" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="Game Over!" TextColor="White" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Score, StringFormat='Score: {0}'}" TextColor="{StaticResource MobileAmber}" FontSize="36" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    
+                    <Label Text="{Binding Grade}" TextColor="{StaticResource MobileSuccess}" FontSize="64" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Correct" TextColor="#B0B0CC" FontSize="14" HorizontalOptions="Center"/>
+                            <Label Text="{Binding CorrectCount, StringFormat='{0}/10'}" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border Stroke="{StaticResource MobileSuccess}" StrokeThickness="2" StrokeShape="RoundRectangle 20" BackgroundColor="#2206D6A0" Margin="0,10,0,0">
+                        <Button Text="Play Again" TextColor="White" FontSize="16" FontAttributes="Bold" BackgroundColor="Transparent" Command="{Binding RestartGameCommand}" Padding="0,14" Clicked="OnPlayAgainClicked"/>
+                    </Border>
+                    <Button Text="Back to Menu" TextColor="#B0B0CC" FontSize="14" BackgroundColor="Transparent" Clicked="OnBackClicked"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

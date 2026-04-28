@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.DailyChallengePage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header -->
+            <Grid HeightRequest="140">
+                <BoxView>
+                    <BoxView.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="{StaticResource MobileAmber}" Offset="0"/>
+                            <GradientStop Color="{StaticResource MobileCoral}" Offset="1"/>
+                        </LinearGradientBrush>
+                    </BoxView.Background>
+                </BoxView>
+                <Ellipse WidthRequest="110" HeightRequest="110"
+                         HorizontalOptions="End" VerticalOptions="Start"
+                         Margin="0,-20,-30,0" Opacity="0.15">
+                    <Ellipse.Fill><SolidColorBrush Color="White"/></Ellipse.Fill>
+                </Ellipse>
+                <VerticalStackLayout Padding="24,50,24,20" VerticalOptions="Start" Spacing="2">
+                    <Label Text="⚡ Daily Challenge"
+                           TextColor="White"
+                           FontSize="24"
+                           FontAttributes="Bold"/>
+                    <Label Text="Complete today's challenge to earn rewards!"
+                           TextColor="White"
+                           FontSize="13"
+                           Opacity="0.85"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- Today's Challenge Card -->
+            <Frame Margin="16,16,16,0"
+                   Padding="0"
+                   CornerRadius="24"
+                   Shadow="{Shadow Brush=Black, Opacity=0.12, Radius=12}">
+                <VerticalStackLayout Spacing="0">
+                    <!-- Card header -->
+                    <Grid HeightRequest="80">
+                        <BoxView x:Name="ChallengeBg">
+                            <BoxView.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="{StaticResource MobileAmber}" Offset="0"/>
+                                    <GradientStop Color="{StaticResource MobileCoral}" Offset="1"/>
+                                </LinearGradientBrush>
+                            </BoxView.Background>
+                        </BoxView>
+                        <HorizontalStackLayout Padding="20,0" Spacing="14">
+                            <Label x:Name="ChallengeIconLabel" Text="⚡"
+                                   FontSize="36" VerticalOptions="Center"/>
+                            <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                                <Label Text="TODAY'S CHALLENGE"
+                                       TextColor="White"
+                                       FontSize="10"
+                                       Opacity="0.85"
+                                       CharacterSpacing="2"/>
+                                <Label x:Name="ChallengeTitleLabel"
+                                       Text="Loading..."
+                                       TextColor="White"
+                                       FontSize="18"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <!-- Card Body -->
+                    <VerticalStackLayout BackgroundColor="{StaticResource MobileSurface}" Padding="20,16" Spacing="16">
+                        <Label x:Name="ChallengeDescLabel"
+                               Text="Complete the challenge to earn XP and a badge!"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}"/>
+
+                        <!-- Progress section -->
+                        <VerticalStackLayout Spacing="8">
+                            <HorizontalStackLayout>
+                                <Label Text="Progress" FontSize="13" FontAttributes="Bold"
+                                       TextColor="{StaticResource TextPrimary}" HorizontalOptions="FillAndExpand"/>
+                                <Label x:Name="ProgressLabel" Text="0 / 300"
+                                       FontSize="13" TextColor="{StaticResource TextSecondary}"/>
+                            </HorizontalStackLayout>
+                            <ProgressBar x:Name="ChallengeProgress" Progress="0" ProgressColor="{StaticResource MobileCoral}"/>
+                        </VerticalStackLayout>
+
+                        <!-- Rewards row -->
+                        <HorizontalStackLayout Spacing="16">
+                            <Frame Padding="12,8" CornerRadius="18" BackgroundColor="{StaticResource MobileAmberMuted}">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="🌟" FontSize="16"/>
+                                    <VerticalStackLayout>
+                                        <Label Text="XP Reward" FontSize="10" TextColor="{StaticResource TextSecondary}"/>
+                                        <Label x:Name="RewardXPLabel" Text="+100 XP"
+                                               FontSize="14" FontAttributes="Bold"
+                                               TextColor="{StaticResource MobileCoral}" />
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Frame>
+                            <Frame Padding="12,8" CornerRadius="18" BackgroundColor="{StaticResource MobileIndigoMuted}">
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label x:Name="BadgeIconLabel" Text="🏆" FontSize="16"/>
+                                    <VerticalStackLayout>
+                                        <Label Text="Badge" FontSize="10" TextColor="{StaticResource TextSecondary}"/>
+                                        <Label Text="Earned on completion"
+                                               FontSize="11" FontAttributes="Bold"
+                                               TextColor="{StaticResource MobileIndigo}" />
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Frame>
+                        </HorizontalStackLayout>
+
+                        <!-- Status / Countdown -->
+                        <Frame x:Name="StatusFrame" Padding="14,10" CornerRadius="14"
+                               BackgroundColor="{StaticResource MobileSurfaceRaised}">
+                            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                                <Label x:Name="StatusIcon" Text="⏱️" FontSize="18"/>
+                                <Label x:Name="StatusLabel" Text="Time remaining: --:--:--"
+                                       FontSize="14" TextColor="{StaticResource TextSecondary}"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Challenge History -->
+            <Label Text="Past 7 Days"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextPrimary}"
+                   Margin="20,24,20,8"/>
+
+            <VerticalStackLayout x:Name="HistoryStack" Margin="16,0,16,100" Spacing="10"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

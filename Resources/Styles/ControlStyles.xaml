@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <x:Double x:Key="RadiusCard">20</x:Double>
+    <x:Double x:Key="RadiusChip">18</x:Double>
+    <x:Double x:Key="RadiusPill">28</x:Double>
+
+    <Style x:Key="ModernCardBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource MobileSurface}" />
+        <Setter Property="Stroke" Value="{StaticResource MobileStroke}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 24" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#1A121A1C" Offset="0,10" Radius="22" Opacity="0.14" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource MobileSurfaceRaised}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Scale" Value="0.985" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MobileHeroBorder" TargetType="Border">
+        <Setter Property="Stroke" Value="#44FFFFFF" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 28" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#33121A1C" Offset="0,16" Radius="28" Opacity="0.2" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MobileInputBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource MobileSurfaceRaised}" />
+        <Setter Property="Stroke" Value="{StaticResource MobileStroke}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 18" />
+        <Setter Property="Padding" Value="14,6" />
+    </Style>
+
+    <Style x:Key="MobileStatTileBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource MobileSurfaceRaised}" />
+        <Setter Property="Stroke" Value="{StaticResource MobileDivider}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+        <Setter Property="Padding" Value="14,12" />
+    </Style>
+
+    <Style x:Key="MobileIconChipBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource MobilePrimaryMuted}" />
+        <Setter Property="Stroke" Value="Transparent" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+        <Setter Property="WidthRequest" Value="44" />
+        <Setter Property="HeightRequest" Value="44" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <Style x:Key="ChoiceChipBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource MobileSurface}" />
+        <Setter Property="Stroke" Value="{StaticResource MobileStroke}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 18" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource MobileSurfaceRaised}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Scale" Value="0.97" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PrimaryCtaBorder" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 28" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#660F766E" Offset="0,10" Radius="28" Opacity="0.32" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="{StaticResource MobilePrimary}" Offset="0" />
+                    <GradientStop Color="{StaticResource MobilePrimaryDark}" Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.96" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Scale" Value="0.98" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GlassCardBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource GlassFill}" />
+        <Setter Property="Stroke" Value="#AAFFFFFF" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+    </Style>
+</ResourceDictionary>

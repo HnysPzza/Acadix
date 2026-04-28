@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AcadsJulie.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:AcadsJulie.Views"
+    Shell.NavBarIsVisible="False">
+
+    <Shell.Resources>
+        <Style TargetType="TabBar">
+            <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource MobileInk}"/>
+            <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource MobileCoral}"/>
+            <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource MobileCoral}"/>
+            <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource MobileTabMuted}"/>
+        </Style>
+    </Shell.Resources>
+
+    <TabBar>
+        <Tab Title="Home" Icon="tab_home.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:HomePage}"
+                Route="HomePage"/>
+        </Tab>
+        <Tab Title="Learn" Icon="tab_challenge.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:LearningHubPage}"
+                Route="LearningHubPage"/>
+        </Tab>
+        <Tab Title="Stats" Icon="tab_stats.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:StatsPage}"
+                Route="StatsPage"/>
+        </Tab>
+        <Tab Title="Rank" Icon="tab_rank.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:RankingPage}"
+                Route="RankingPage"/>
+        </Tab>
+        <Tab Title="Quests" Icon="tab_challenge.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:DailyQuestsPage}"
+                Route="Quests"/>
+        </Tab>
+        <Tab Title="Profile" Icon="tab_profile.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:ProfilePage}"
+                Route="ProfilePage"/>
+        </Tab>
+    </TabBar>
+</Shell>

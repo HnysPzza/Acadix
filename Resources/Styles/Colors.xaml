@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Primary Brand Colors -->
+    <Color x:Key="BrainBlue">#4361EE</Color>
+    <Color x:Key="BrainPurple">#7B2FBE</Color>
+    <Color x:Key="BrainPurpleLight">#9D4EDD</Color>
+    <Color x:Key="BrainDeepBlue">#2B2D8A</Color>
+    <Color x:Key="BrainBlueMid">#3A86FF</Color>
+
+    <!-- Accent Colors -->
+    <Color x:Key="AccentGreen">#06D6A0</Color>
+    <Color x:Key="AccentGreenLight">#0EE9B0</Color>
+    <Color x:Key="AccentOrange">#FF9A3C</Color>
+    <Color x:Key="AccentOrangeLight">#FFB347</Color>
+    <Color x:Key="AccentPink">#FF4D6D</Color>
+    <Color x:Key="AccentYellow">#FFD166</Color>
+
+    <!-- Category Colors -->
+    <Color x:Key="MemoryColor">#4361EE</Color>
+    <Color x:Key="FocusColor">#06D6A0</Color>
+    <Color x:Key="LogicColor">#9D4EDD</Color>
+    <Color x:Key="SpeedColor">#FF9A3C</Color>
+
+    <!-- Background Colors -->
+    <Color x:Key="MobileCanvas">#EAF2EE</Color>
+    <Color x:Key="MobileCanvasDeep">#DDEAE5</Color>
+    <Color x:Key="MobileSurface">#F7FBF8</Color>
+    <Color x:Key="MobileSurfaceRaised">#EEF7F3</Color>
+    <Color x:Key="MobileSurfaceSunken">#DDE9E5</Color>
+    <Color x:Key="MobileInk">#121A1C</Color>
+    <Color x:Key="MobilePrimary">#0F766E</Color>
+    <Color x:Key="MobilePrimaryDark">#134E4A</Color>
+    <Color x:Key="MobilePrimaryMuted">#D8F3EC</Color>
+    <Color x:Key="MobileCoral">#F9735B</Color>
+    <Color x:Key="MobileCoralMuted">#FFE4D9</Color>
+    <Color x:Key="MobileAmber">#F6A623</Color>
+    <Color x:Key="MobileAmberMuted">#FFF0C2</Color>
+    <Color x:Key="MobileIndigo">#4856D6</Color>
+    <Color x:Key="MobileIndigoMuted">#E4E8FF</Color>
+    <Color x:Key="MobileSuccess">#16A34A</Color>
+    <Color x:Key="MobileSuccessMuted">#DDF8EC</Color>
+    <Color x:Key="MobileStroke">#C7D7D2</Color>
+    <Color x:Key="MobileDivider">#D9E5E0</Color>
+    <Color x:Key="MobileTabMuted">#8EA09B</Color>
+    <Color x:Key="PageBackground">#EAF2EE</Color>
+    <Color x:Key="CardBackground">#F7FBF8</Color>
+    <Color x:Key="GlassBackground">#CCF7FBF8</Color>
+    <Color x:Key="DarkBackground">#0D0D1A</Color>
+    <Color x:Key="DarkCard">#1A1A2E</Color>
+    <Color x:Key="DarkCardAlt">#16213E</Color>
+    <Color x:Key="SurfaceLight">#F5F5FF</Color>
+
+    <!-- Text Colors -->
+    <Color x:Key="TextPrimary">#121A1C</Color>
+    <Color x:Key="TextSecondary">#59686A</Color>
+    <Color x:Key="TextMuted">#7E8D90</Color>
+    <Color x:Key="TextLight">#F9FAFB</Color>
+    <Color x:Key="TextOnDark">#E2E8F0</Color>
+
+    <!-- Gradient Stops -->
+    <Color x:Key="GradStart">#134E4A</Color>
+    <Color x:Key="GradMid">#0F766E</Color>
+    <Color x:Key="GradEnd">#4856D6</Color>
+
+    <!-- Semantic Tokens -->
+    <Color x:Key="Surface">#F7FBF8</Color>
+    <Color x:Key="SurfaceAlt">#EAF2EE</Color>
+    <Color x:Key="BrandPrimary">#0F766E</Color>
+    <Color x:Key="BrandAccent">#F9735B</Color>
+    <Color x:Key="Success">#16A34A</Color>
+    <Color x:Key="Warning">#F59E0B</Color>
+    <Color x:Key="Danger">#EF4444</Color>
+    <Color x:Key="CardStroke">#C7D7D2</Color>
+    <Color x:Key="GlassFill">#88F7FBF8</Color>
+
+    <!-- Legacy (kept for Styles.xaml compatibility) -->
+    <Color x:Key="Primary">#4361EE</Color>
+    <Color x:Key="PrimaryDark">#2B2D8A</Color>
+    <Color x:Key="PrimaryDarkText">#E2E8F0</Color>
+    <Color x:Key="Secondary">#9D4EDD</Color>
+    <Color x:Key="SecondaryDarkText">#7B2FBE</Color>
+    <Color x:Key="Tertiary">#06D6A0</Color>
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+    <Color x:Key="Magenta">#FF4D6D</Color>
+    <Color x:Key="MidnightBlue">#0D0D1A</Color>
+    <Color x:Key="OffBlack">#1A1A2E</Color>
+    <Color x:Key="Gray100">#F3F4F6</Color>
+    <Color x:Key="Gray200">#E5E7EB</Color>
+    <Color x:Key="Gray300">#D1D5DB</Color>
+    <Color x:Key="Gray400">#9CA3AF</Color>
+    <Color x:Key="Gray500">#6B7280</Color>
+    <Color x:Key="Gray600">#4B5563</Color>
+    <Color x:Key="Gray900">#111827</Color>
+    <Color x:Key="Gray950">#030712</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
+    <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}"/>
+    <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}"/>
+    <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}"/>
+    <SolidColorBrush x:Key="Gray300Brush" Color="{StaticResource Gray300}"/>
+    <SolidColorBrush x:Key="Gray400Brush" Color="{StaticResource Gray400}"/>
+    <SolidColorBrush x:Key="Gray500Brush" Color="{StaticResource Gray500}"/>
+    <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
+    <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
+    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+</ResourceDictionary>

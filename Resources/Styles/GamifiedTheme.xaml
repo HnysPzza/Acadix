@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Palette -->
+    <Color x:Key="GamifiedPageBg">#FFFFFF</Color>
+    <Color x:Key="GamifiedCardBg">#FFFFFF</Color>
+    <Color x:Key="GamifiedCardStroke">#E5E5E5</Color>
+    <Color x:Key="GamifiedTextPrimary">#1F2937</Color>
+    <Color x:Key="GamifiedTextMuted">#6B7280</Color>
+    <Color x:Key="GamifiedBlue">#1CB0F6</Color>
+    <Color x:Key="GamifiedSuccess">#58CC02</Color>
+    <Color x:Key="GamifiedError">#FF4B4B</Color>
+    <Color x:Key="GamifiedGreenSoft">#E9FAD9</Color>
+    <Color x:Key="GamifiedGreenStroke">#3B8E00</Color>
+    <Color x:Key="GamifiedRedSoft">#FFE5E5</Color>
+    <Color x:Key="GamifiedRedStroke">#C53030</Color>
+    <Color x:Key="GamifiedAnswerStroke">#D1D5DB</Color>
+    <Color x:Key="GamifiedChipYellowShadow">#FFE799</Color>
+    <Color x:Key="GamifiedChipBlueShadow">#B3E6FF</Color>
+    <Color x:Key="GamifiedChipPurpleShadow">#E1D4FF</Color>
+
+    <!-- Typography -->
+    <x:String x:Key="GamifiedFontHeading">OpenSansSemibold</x:String>
+    <x:String x:Key="GamifiedFontBody">OpenSansRegular</x:String>
+    <x:Double x:Key="GamifiedHeadingSize">24</x:Double>
+    <x:Double x:Key="GamifiedBodySize">16</x:Double>
+    <x:Double x:Key="GamifiedCaptionSize">13</x:Double>
+
+    <!-- Shared Brushes -->
+    <LinearGradientBrush x:Key="GamifiedProgressGloss" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#66FFFFFF" Offset="0" />
+        <GradientStop Color="#00FFFFFF" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Borders -->
+    <Style x:Key="GamifiedCardBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedCardBg}" />
+        <Setter Property="Stroke" Value="{StaticResource GamifiedCardStroke}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 18" />
+    </Style>
+
+    <Style x:Key="GamifiedSpeechBubbleBorder" TargetType="Border" BasedOn="{StaticResource GamifiedCardBorder}">
+        <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+        <Setter Property="Padding" Value="16,14" />
+    </Style>
+
+    <Style x:Key="GamifiedChoiceChip" TargetType="Border" BasedOn="{StaticResource GamifiedCardBorder}">
+        <Setter Property="Padding" Value="14,12" />
+        <Setter Property="StrokeThickness" Value="1.5" />
+    </Style>
+
+    <Style x:Key="GamifiedDifficultySegment" TargetType="Border" BasedOn="{StaticResource GamifiedCardBorder}">
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#29000000" Offset="0,2" Radius="0" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GamifiedAnswerBorder" TargetType="Border" BasedOn="{StaticResource GamifiedCardBorder}">
+        <Setter Property="Padding" Value="14,12" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="Stroke" Value="{StaticResource GamifiedAnswerStroke}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource GamifiedCardBg}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+    </Style>
+
+    <!-- Labels -->
+    <Style x:Key="GamifiedHeadingLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource GamifiedFontHeading}" />
+        <Setter Property="FontSize" Value="{StaticResource GamifiedHeadingSize}" />
+        <Setter Property="TextColor" Value="{StaticResource GamifiedTextPrimary}" />
+    </Style>
+
+    <Style x:Key="GamifiedBodyLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource GamifiedFontBody}" />
+        <Setter Property="FontSize" Value="{StaticResource GamifiedBodySize}" />
+        <Setter Property="TextColor" Value="{StaticResource GamifiedTextPrimary}" />
+    </Style>
+
+    <Style x:Key="GamifiedCaptionLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource GamifiedFontHeading}" />
+        <Setter Property="FontSize" Value="{StaticResource GamifiedCaptionSize}" />
+        <Setter Property="TextColor" Value="{StaticResource GamifiedTextMuted}" />
+    </Style>
+</ResourceDictionary>

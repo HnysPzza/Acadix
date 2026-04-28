@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AcadsJulie.ViewModels"
+             xmlns:models="clr-namespace:AcadsJulie.Models"
+             x:Class="AcadsJulie.Views.AchievementsPage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Title="Achievements">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+        <!-- Back Navigation -->
+        <Button Grid.Row="0" 
+                Text="← Back to Profile" 
+                Command="{Binding GoBackCommand}"
+                BackgroundColor="Transparent"
+                TextColor="{StaticResource MobilePrimary}"
+                FontAttributes="Bold"
+                HorizontalOptions="Start"
+                Margin="16,10,0,0"/>
+
+        <!-- Header Profile Summary -->
+        <Frame Grid.Row="1" Margin="16,10,16,16" Padding="20" CornerRadius="24" BackgroundColor="{StaticResource MobileSurface}" BorderColor="{StaticResource MobileStroke}" HasShadow="True">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Your Trophy Room" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                <Label Text="{Binding UnlockedAchievements, StringFormat='You have unlocked {0} badges!'}" 
+                       FontSize="14" TextColor="{StaticResource TextSecondary}" />
+                <ProgressBar Progress="{Binding ProgressPercentage}" ProgressColor="{StaticResource MobilePrimary}" Margin="0,8,0,0"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Achievements Grid -->
+        <CollectionView Grid.Row="2" 
+                        ItemsSource="{Binding Achievements}" 
+                        SelectionMode="None"
+                        Margin="16,0,16,16">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Achievement">
+                    <!-- Gesture Recognizer bound to the ViewModel Command -->
+                    <Frame CornerRadius="20" Padding="10" HasShadow="False"
+                           BackgroundColor="{StaticResource MobileCoralMuted}"
+                           BorderColor="{StaticResource MobileStroke}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AchievementsViewModel}}, Path=SelectAchievementCommand}"
+                                CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
+
+                        <!-- Triggers for Locked/Unlocked Visual State -->
+                        <Frame.Triggers>
+                            <DataTrigger TargetType="Frame" Binding="{Binding IsUnlocked}" Value="False">
+                                <Setter Property="BackgroundColor" Value="{StaticResource MobileSurfaceSunken}" />
+                                <Setter Property="Opacity" Value="0.5" />
+                            </DataTrigger>
+                        </Frame.Triggers>
+
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label Text="{Binding Icon}" FontSize="36" HorizontalOptions="Center" />
+                            <Label Text="{Binding Title}" FontSize="12" FontAttributes="Bold" 
+                                   HorizontalTextAlignment="Center" 
+                                   TextColor="{StaticResource MobileCoral}" MaxLines="2" LineBreakMode="WordWrap">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsUnlocked}" Value="False">
+                                        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

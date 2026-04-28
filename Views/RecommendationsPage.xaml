@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.RecommendationsPage"
+             Title="Guidance"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="22" Padding="20,20,20,120">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Text="←"
+                        Clicked="OnBackClicked"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        CornerRadius="22"
+                        BackgroundColor="{StaticResource MobileSurfaceRaised}"
+                        TextColor="{StaticResource TextPrimary}"
+                        FontSize="18" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="Academic Guidance" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border Style="{StaticResource MobileHeroBorder}" Padding="20,18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource GradStart}" Offset="0"/>
+                        <GradientStop Color="{StaticResource MobilePrimary}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="GUIDANCE REPORT" FontSize="11" FontAttributes="Bold" TextColor="#E7F0F8" />
+                    <Label Text="Strand and course suggestions based on your performance" FontSize="18" FontAttributes="Bold" TextColor="White" LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource ModernCardBorder}" Padding="18">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Education stage" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                        <Border x:Name="JuniorHighBorder" Padding="14,12" BackgroundColor="{StaticResource MobileSurfaceRaised}" Stroke="{StaticResource MobileStroke}" StrokeThickness="2" StrokeShape="RoundRectangle 18">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnJuniorHighTapped" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                                <Label Text="🏫" FontSize="24" HorizontalOptions="Center" />
+                                <Label Text="Junior High" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center" />
+                                <Label Text="Grades 7-10" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border x:Name="SeniorHighBorder" Grid.Column="1" Padding="14,12" BackgroundColor="{StaticResource MobileSurfaceRaised}" Stroke="{StaticResource MobileStroke}" StrokeThickness="2" StrokeShape="RoundRectangle 18">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnSeniorHighTapped" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                                <Label Text="🎓" FontSize="24" HorizontalOptions="Center" />
+                                <Label Text="Senior High" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center" />
+                                <Label Text="Grades 11-12" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border x:Name="CollegeBorder" Grid.Column="2" Padding="14,12" BackgroundColor="{StaticResource MobileSurfaceRaised}" Stroke="{StaticResource MobileStroke}" StrokeThickness="2" StrokeShape="RoundRectangle 18">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCollegeTapped" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                                <Label Text="🏛️" FontSize="24" HorizontalOptions="Center" />
+                                <Label Text="College" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center" />
+                                <Label Text="University" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="Aptitude scores" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+            <CollectionView x:Name="AptitudesCollection" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,10" Style="{StaticResource ModernCardBorder}" Padding="14">
+                            <VerticalStackLayout Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding Domain}" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                    <Label Grid.Column="1" Text="{Binding DisplayScore}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource MobilePrimary}" />
+                                </Grid>
+                                <ProgressBar Progress="{Binding Progress}" ProgressColor="{StaticResource MobilePrimary}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label x:Name="RecommendationsHeader" Text="Recommendations" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" Margin="0,8,0,0" />
+            <CollectionView x:Name="RecommendationsCollection" SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <Border Style="{StaticResource ModernCardBorder}" Padding="20">
+                        <Label Text="Play more quizzes to unlock recommendations" HorizontalOptions="Center" TextColor="{StaticResource TextSecondary}" />
+                    </Border>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,10" Style="{StaticResource ModernCardBorder}" Padding="16">
+                            <VerticalStackLayout Spacing="8">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                    <Label Text="{Binding Title}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                    <Border Grid.Column="1" BackgroundColor="{StaticResource MobilePrimaryMuted}" Stroke="Transparent" StrokeShape="RoundRectangle 14" Padding="8,4" VerticalOptions="Start">
+                                        <Label Text="{Binding MatchLabel}" TextColor="{StaticResource MobilePrimaryDark}" FontSize="10" />
+                                    </Border>
+                                </Grid>
+                                <Label Text="{Binding Reason}" FontSize="12" TextColor="{StaticResource TextSecondary}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

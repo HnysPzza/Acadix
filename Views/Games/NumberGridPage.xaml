@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AcadsJulie.ViewModels"
+             x:Class="AcadsJulie.Views.Games.NumberGridPage"
+             x:DataType="viewmodels:NumberGridViewModel"
+             x:Name="Root"
+             BackgroundColor="#1A1A2E"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <Style x:Key="GlassCardStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#22FFFFFF" />
+            <Setter Property="Stroke" Value="#33FFFFFF" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape">
+                <Setter.Value><RoundRectangle CornerRadius="16" /></Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background gradient -->
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="{StaticResource MobileSuccess}" Offset="0"/>
+                    <GradientStop Color="{StaticResource MobilePrimaryDark}" Offset="1"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- Game UI -->
+        <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="24">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
+                <Button Grid.Column="0" Text="←" FontSize="20" FontAttributes="Bold"
+                        BackgroundColor="#22FFFFFF" TextColor="White"
+                        CornerRadius="18" WidthRequest="44" HeightRequest="44"
+                        Clicked="OnBackClicked"/>
+                <Border Grid.Column="1" Style="{StaticResource GlassCardStyle}" Padding="16" Margin="8,0,0,0">
+                    <Label Text="{Binding HudText}" TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </Border>
+            </Grid>
+
+            <CollectionView Grid.Row="1" ItemsSource="{Binding Sequence}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Horizontal" HorizontalItemSpacing="8" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:Int32">
+                        <Border BackgroundColor="#220F766E" StrokeShape="RoundRectangle 14" Padding="16" HorizontalOptions="Center">
+                            <Label Text="{Binding .}" TextColor="White" FontSize="20" FontAttributes="Bold"/>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <CollectionView Grid.Row="2" ItemsSource="{Binding Options}" VerticalOptions="Center">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="16" VerticalItemSpacing="16"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:Int32">
+                        <Button Text="{Binding .}" Command="{Binding Source={x:Reference Root}, Path=BindingContext.SelectOptionCommand}" CommandParameter="{Binding .}" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" FontAttributes="Bold" CornerRadius="18" Padding="0,16"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- Game Over Overlay -->
+        <Grid IsVisible="{Binding IsGameOver}" BackgroundColor="#B3000000">
+            <Border Style="{StaticResource GlassCardStyle}" Margin="40" Padding="30" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="🔢 Number Grid" TextColor="#B0B0CC" FontSize="16" HorizontalOptions="Center"/>
+                    <Label Text="Time's Up!" TextColor="White" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Score, StringFormat='Score: {0}'}" TextColor="{StaticResource MobileSuccess}" FontSize="36" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Level, StringFormat='Level Reached: {0}'}" TextColor="#B0B0CC" FontSize="16" HorizontalOptions="Center"/>
+                    <Border Stroke="{StaticResource MobileSuccess}" StrokeThickness="2" StrokeShape="RoundRectangle 20" BackgroundColor="#2206D6A0" Margin="0,10,0,0">
+                        <Button Text="Play Again" TextColor="White" FontSize="16" FontAttributes="Bold" BackgroundColor="Transparent" Command="{Binding RestartGameCommand}" Padding="0,14" Clicked="OnPlayAgainClicked"/>
+                    </Border>
+                    <Button Text="Back to Menu" TextColor="#B0B0CC" FontSize="14" BackgroundColor="Transparent" Clicked="OnBackClicked"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

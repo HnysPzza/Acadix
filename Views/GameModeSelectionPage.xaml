@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.GameModeSelectionPage"
+             BackgroundColor="#B3000000">
+
+    <Grid>
+        <!-- Modal Background Click to Dismiss -->
+        <BoxView BackgroundColor="Transparent">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseTapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- Modal Content -->
+        <Frame VerticalOptions="Center"
+               HorizontalOptions="Center"
+               WidthRequest="320"
+               Padding="0"
+               CornerRadius="24"
+               HasShadow="True"
+               BackgroundColor="{StaticResource MobileCanvas}">
+            
+            <VerticalStackLayout Spacing="0">
+                <!-- Header -->
+                <Grid Padding="20,20,20,16" BackgroundColor="{StaticResource MobilePrimaryDark}">
+                    <Label Text="Select Game Mode"
+                           TextColor="White"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                </Grid>
+
+                <VerticalStackLayout Padding="20" Spacing="16">
+                    
+                    <!-- Normal Mode -->
+                    <Border Stroke="{StaticResource MobileStroke}" StrokeThickness="1" StrokeShape="RoundRectangle 20"
+                            Padding="16" BackgroundColor="{StaticResource MobileSurface}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.SelectModeCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="Normal" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="16">
+                            <Label Text="⏱️" FontSize="32" VerticalOptions="Center"/>
+                            <VerticalStackLayout VerticalOptions="Center">
+                                <Label Text="Normal (Timed)" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                                <Label Text="Classic brain training with a time limit." FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Endless Mode -->
+                    <Border Stroke="{StaticResource MobileStroke}" StrokeThickness="1" StrokeShape="RoundRectangle 20"
+                            Padding="16" BackgroundColor="{StaticResource MobileSurface}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.SelectModeCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="Endless" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="16">
+                            <Label Text="🔥" FontSize="32" VerticalOptions="Center"/>
+                            <VerticalStackLayout VerticalOptions="Center">
+                                <Label Text="Endless Mode" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                                <Label Text="Play until you make 3 mistakes. No timers." FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Zen Mode -->
+                    <Border Stroke="{StaticResource MobileStroke}" StrokeThickness="1" StrokeShape="RoundRectangle 20"
+                            Padding="16" BackgroundColor="{StaticResource MobileSurface}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.SelectModeCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="Zen" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="16">
+                            <Label Text="🧘" FontSize="32" VerticalOptions="Center"/>
+                            <VerticalStackLayout VerticalOptions="Center">
+                                <Label Text="Zen Mode" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"/>
+                                <Label Text="Relaxing practice. No timers, no scores." FontSize="12" TextColor="{StaticResource TextSecondary}"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Cancel Button -->
+                    <Button Text="Cancel"
+                            Clicked="OnCloseTapped"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource TextSecondary}"
+                            FontAttributes="Bold"
+                            Margin="0,8,0,0"/>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+
+</ContentPage>

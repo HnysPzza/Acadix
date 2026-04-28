@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.LessonViewerPage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20,20,20,120">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Text="←"
+                        Clicked="OnBackClicked"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        CornerRadius="22"
+                        BackgroundColor="{StaticResource MobileSurfaceRaised}"
+                        TextColor="{StaticResource TextPrimary}"
+                        FontSize="18" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label x:Name="LessonTitleLabel" Text="Lesson Title" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <Label x:Name="LessonDurationLabel" Text="15 min" FontSize="12" TextColor="{StaticResource TextSecondary}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border Style="{StaticResource ModernCardBorder}" Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label x:Name="LessonContentLabel" 
+                           Text="Lesson content will appear here" 
+                           FontSize="15" 
+                           LineHeight="1.6"
+                           TextColor="{StaticResource TextPrimary}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border x:Name="KeyConceptsCard" Style="{StaticResource ModernCardBorder}" Padding="16" IsVisible="False">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="📌 Key Concepts" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <VerticalStackLayout x:Name="KeyConceptsStack" Spacing="6" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button x:Name="CompleteButton"
+                    Text="Mark as Complete"
+                    Clicked="OnCompleteClicked"
+                    BackgroundColor="{StaticResource MobileSuccess}"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="50"
+                    FontAttributes="Bold" />
+
+            <Button x:Name="NextLessonButton"
+                    Text="Next Lesson →"
+                    Clicked="OnNextLessonClicked"
+                    BackgroundColor="{StaticResource MobilePrimary}"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="50"
+                    FontAttributes="Bold"
+                    IsVisible="False" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

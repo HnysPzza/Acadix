@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.ContentViewerPage"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20,20,20,120">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <Button Text="←"
+                        Clicked="OnBackClicked"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        CornerRadius="22"
+                        BackgroundColor="{StaticResource MobileSurfaceRaised}"
+                        TextColor="{StaticResource TextPrimary}"
+                        FontSize="18" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label x:Name="TitleLabel" Text="Content Title" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                    <Label x:Name="CategoryLabel" Text="Category" FontSize="12" TextColor="{StaticResource MobilePrimary}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="2"
+                        x:Name="BookmarkButton"
+                        Text="🔖"
+                        Clicked="OnBookmarkClicked"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        CornerRadius="22"
+                        BackgroundColor="{StaticResource MobilePrimaryMuted}"
+                        FontSize="18" />
+            </Grid>
+
+            <Border Style="{StaticResource ModernCardBorder}" Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label x:Name="ContentLabel" 
+                           Text="Content will appear here" 
+                           FontSize="15" 
+                           LineHeight="1.6"
+                           TextColor="{StaticResource TextPrimary}" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

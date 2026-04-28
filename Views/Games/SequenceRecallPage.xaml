@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AcadsJulie.ViewModels"
+             x:Class="AcadsJulie.Views.Games.SequenceRecallPage"
+             x:DataType="viewmodels:SequenceRecallViewModel"
+             x:Name="Root"
+             BackgroundColor="{StaticResource MobileInk}"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <Style x:Key="GlassCardStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#22FFFFFF" />
+            <Setter Property="Stroke" Value="#33FFFFFF" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape">
+                <Setter.Value><RoundRectangle CornerRadius="16" /></Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <!-- Background gradient -->
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="{StaticResource MobileInk}" Offset="0"/>
+                    <GradientStop Color="{StaticResource MobileIndigo}" Offset="1"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- Game UI -->
+        <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="16" RowSpacing="24">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
+                <Button Grid.Column="0" Text="←" FontSize="20" FontAttributes="Bold"
+                        BackgroundColor="#22FFFFFF" TextColor="White"
+                        CornerRadius="18" WidthRequest="44" HeightRequest="44"
+                        Clicked="OnBackClicked"/>
+                <Border Grid.Column="1" Style="{StaticResource GlassCardStyle}" Padding="16" Margin="8,0,0,0">
+                    <Label Text="{Binding HudText}" TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </Border>
+            </Grid>
+
+            <Label Grid.Row="1" Text="{Binding DisplaySequence}" FontSize="42" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+            <Label Grid.Row="2" Text="{Binding UserScript}" FontSize="32" TextColor="{StaticResource MobileSuccess}" HorizontalOptions="Center" FontAttributes="Bold"/>
+
+            <Grid Grid.Row="3" ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="12">
+                <Button Grid.Row="0" Grid.Column="0" Text="1" Command="{Binding TypeNumberCommand}" CommandParameter="1" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="0" Grid.Column="1" Text="2" Command="{Binding TypeNumberCommand}" CommandParameter="2" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="0" Grid.Column="2" Text="3" Command="{Binding TypeNumberCommand}" CommandParameter="3" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="1" Grid.Column="0" Text="4" Command="{Binding TypeNumberCommand}" CommandParameter="4" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="1" Grid.Column="1" Text="5" Command="{Binding TypeNumberCommand}" CommandParameter="5" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="1" Grid.Column="2" Text="6" Command="{Binding TypeNumberCommand}" CommandParameter="6" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="2" Grid.Column="0" Text="7" Command="{Binding TypeNumberCommand}" CommandParameter="7" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="2" Grid.Column="1" Text="8" Command="{Binding TypeNumberCommand}" CommandParameter="8" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="2" Grid.Column="2" Text="9" Command="{Binding TypeNumberCommand}" CommandParameter="9" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="3" Grid.Column="1" Text="0" Command="{Binding TypeNumberCommand}" CommandParameter="0" BackgroundColor="#22FFFFFF" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+                <Button Grid.Row="3" Grid.Column="2" Text="⌫" Command="{Binding DeleteNumberCommand}" BackgroundColor="#22FF6B6B" TextColor="White" FontSize="24" CornerRadius="18" Padding="0,16"/>
+            </Grid>
+        </Grid>
+
+        <!-- Game Over Overlay -->
+        <Grid IsVisible="{Binding IsGameOver}" BackgroundColor="#B3000000">
+            <Border Style="{StaticResource GlassCardStyle}" Margin="40" Padding="30" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="🧠 Sequence Recall" TextColor="#B0B0CC" FontSize="16" HorizontalOptions="Center"/>
+                    <Label Text="Time's Up!" TextColor="White" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Score, StringFormat='Score: {0}'}" TextColor="{StaticResource MobileIndigo}" FontSize="36" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Level, StringFormat='Max Sequence Length: {0}'}" TextColor="#B0B0CC" FontSize="16" HorizontalOptions="Center"/>
+                    <Border Stroke="{StaticResource MobileIndigo}" StrokeThickness="2" StrokeShape="RoundRectangle 20" BackgroundColor="#224856D6" Margin="0,10,0,0">
+                        <Button Text="Play Again" TextColor="White" FontSize="16" FontAttributes="Bold" BackgroundColor="Transparent" Command="{Binding RestartGameCommand}" Padding="0,14" Clicked="OnPlayAgainClicked"/>
+                    </Border>
+                    <Button Text="Back to Menu" TextColor="#B0B0CC" FontSize="14" BackgroundColor="Transparent" Clicked="OnBackClicked"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcadsJulie.Views.CoursesPage"
+             Title="Courses"
+             BackgroundColor="{StaticResource MobileCanvas}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20,20,20,120">
+            <Border Style="{StaticResource MobileHeroBorder}" Padding="20,18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource GradStart}" Offset="0"/>
+                        <GradientStop Color="{StaticResource GradMid}" Offset="0.55"/>
+                        <GradientStop Color="{StaticResource GradEnd}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Learning Platform" FontSize="28" FontAttributes="Bold" TextColor="White" />
+                    <Label Text="Explore courses and expand your knowledge" FontSize="14" TextColor="White" Opacity="0.88" />
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout Spacing="12">
+                <Label Text="My Courses" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                <CollectionView x:Name="EnrolledCoursesCollection" SelectionMode="None">
+                    <CollectionView.EmptyView>
+                        <Border Style="{StaticResource ModernCardBorder}" Padding="20">
+                            <Label Text="No enrolled courses yet. Browse the catalog below to get started!" 
+                                   HorizontalOptions="Center" 
+                                   TextColor="{StaticResource TextSecondary}" 
+                                   HorizontalTextAlignment="Center" />
+                        </Border>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="12" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource ModernCardBorder}" Padding="16" WidthRequest="280">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCourseCardTapped" CommandParameter="{Binding Id}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="{Binding ThumbnailEmoji}" FontSize="32" HorizontalOptions="Start" />
+                                    <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" LineBreakMode="WordWrap" />
+                                    <Label Text="{Binding Category}" FontSize="12" TextColor="{StaticResource MobileIndigo}" />
+                                    <ProgressBar x:Name="CourseProgressBar" Progress="0.5" ProgressColor="{StaticResource MobileSuccess}" HeightRequest="4" />
+                                    <Label Text="Continue learning" FontSize="12" TextColor="{StaticResource TextSecondary}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="12">
+                <Label Text="Featured Courses" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                <CollectionView x:Name="FeaturedCoursesCollection" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,12" Style="{StaticResource ModernCardBorder}" Padding="16">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCourseCardTapped" CommandParameter="{Binding Id}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                                    <Border BackgroundColor="{StaticResource MobileIndigoMuted}" 
+                                            Stroke="Transparent" 
+                                            StrokeShape="RoundRectangle 16" 
+                                            WidthRequest="60" 
+                                            HeightRequest="60"
+                                            VerticalOptions="Start">
+                                        <Label Text="{Binding ThumbnailEmoji}" 
+                                               FontSize="32" 
+                                               HorizontalOptions="Center" 
+                                               VerticalOptions="Center" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                        <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                        <Label Text="{Binding Description}" FontSize="13" TextColor="{StaticResource TextSecondary}" LineBreakMode="WordWrap" MaxLines="2" />
+                                        <HorizontalStackLayout Spacing="12">
+                                            <Label Text="{Binding Category}" FontSize="11" TextColor="{StaticResource MobileIndigo}" />
+                                            <Label Text="•" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                            <Label Text="{Binding DifficultyLevel}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                            <Label Text="•" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                            <Label Text="{Binding DurationLabel}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="12">
+                <Label Text="All Courses" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                <CollectionView x:Name="AllCoursesCollection" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,10" Style="{StaticResource ModernCardBorder}" Padding="14">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCourseCardTapped" CommandParameter="{Binding Id}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                    <Label Text="{Binding ThumbnailEmoji}" FontSize="28" VerticalOptions="Center" />
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                        <Label Text="{Binding Title}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="{Binding LessonsLabel}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                            <Label Text="•" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                            <Label Text="{Binding DurationLabel}" FontSize="11" TextColor="{StaticResource TextSecondary}" />
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="2" Text="→" FontSize="18" TextColor="{StaticResource MobilePrimary}" VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,19 @@
+# Build output
+bin/
+obj/
+
+# User/local IDE files
+*.user
+.vs/
+.cursor/
+
+# Local logs and diagnostics
+*.log
+
+# Local Firebase/environment configuration
+.env
+.env.*
+!.env.example
+Configuration/FirebaseSettings.local.cs
+google-services*.json
+GoogleService-Info.plist
