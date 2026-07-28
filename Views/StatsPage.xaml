@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
              x:Class="AcadsJulie.Views.StatsPage"
-             BackgroundColor="{StaticResource PageBackground}"
+             BackgroundColor="{StaticResource MobileCanvas}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>

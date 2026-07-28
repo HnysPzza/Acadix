@@ -6,7 +6,7 @@
              x:Class="AcadsJulie.Views.Games.QuickMathPage"
              x:DataType="viewmodels:QuickMathViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="#1A1A2E">
+             BackgroundColor="{StaticResource DarkSurface}">
 
     <ContentPage.Resources>
         <Style x:Key="GlassCardStyle" TargetType="Border">

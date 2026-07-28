@@ -4,7 +4,7 @@
              xmlns:viewmodels="clr-namespace:AcadsJulie.ViewModels"
              x:Class="AcadsJulie.Views.Games.ReactionTapPage"
              x:DataType="viewmodels:ReactionTapViewModel"
-             BackgroundColor="#1A1A2E"
+             BackgroundColor="{StaticResource DarkSurface}"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>

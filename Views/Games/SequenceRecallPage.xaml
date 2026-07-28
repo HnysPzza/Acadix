@@ -5,7 +5,7 @@
              x:Class="AcadsJulie.Views.Games.SequenceRecallPage"
              x:DataType="viewmodels:SequenceRecallViewModel"
              x:Name="Root"
-             BackgroundColor="{StaticResource MobileInk}"
+             BackgroundColor="{StaticResource DarkSurface}"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>

@@ -5,7 +5,7 @@
              x:Class="AcadsJulie.Views.Games.ColorTapPage"
              x:DataType="viewmodels:ColorTapViewModel"
              x:Name="Root"
-             BackgroundColor="#1A1A2E"
+             BackgroundColor="{StaticResource DarkSurface}"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>

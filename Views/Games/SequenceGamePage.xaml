@@ -6,7 +6,7 @@
              x:Class="AcadsJulie.Views.Games.SequenceGamePage"
              x:DataType="viewmodels:SequenceGameViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="{StaticResource MobileInk}">
+             BackgroundColor="{StaticResource DarkSurface}">
 
     <ContentPage.Resources>
         <Style x:Key="GlassCardStyle" TargetType="Border">

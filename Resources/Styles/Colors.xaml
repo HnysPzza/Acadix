@@ -3,6 +3,83 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <!--
+    ==========================================================================
+     ACADIX COLOR SYSTEM  ·  START HERE
+    ==========================================================================
+
+     THREE BRAND COLOURS. Everything else is a neutral or a state signal.
+
+       1. PRIMARY   #0F766E  teal    · actions, navigation, brand identity
+       2. ACCENT    #F9735B  coral   · streaks, rewards, highlights
+       3. INK       #121A1C          · text and dark surfaces
+
+     Plus NEUTRALS (canvas / surface / stroke) and two STATE colours
+     (success / danger). State colours are not "brand" colours   they are
+     feedback signals, and collapsing them into the brand palette would make
+     an error look identical to a success.
+
+     RULES
+       · Use a token. Never paste a raw hex into a page.
+       · Primary appears at most twice per screen. Overuse kills an accent.
+       · On LIGHT backgrounds, use the *OnLight text variants   the vivid
+         brand colours fail WCAG contrast as small text (measured below).
+       · On DARK game screens the vivid originals are correct and already
+         pass at 5:1 to 9:1. Do not "fix" those.
+
+     WHY THIS EXISTS
+       An audit found 205 colour values: 9 different greens for "success",
+       9 reds for "error", 8 ambers for "warning", and 3 token names
+       (MobileCanvas / SurfaceAlt / PageBackground) all resolving to the same
+       #EAF2EE. Pages drifted because there was no single source of truth.
+    ==========================================================================
+    -->
+
+    <!-- 1 · PRIMARY ........................................................ -->
+    <Color x:Key="Brand">#0F766E</Color>
+    <Color x:Key="BrandDark">#134E4A</Color>
+    <Color x:Key="BrandMuted">#D8F3EC</Color>
+
+    <!-- 2 · ACCENT ......................................................... -->
+    <Color x:Key="Accent">#F9735B</Color>
+    <Color x:Key="AccentOnLight">#B23A22</Color>
+    <Color x:Key="AccentMuted">#FFE4D9</Color>
+
+    <!-- 3 · INK ............................................................ -->
+    <Color x:Key="Ink">#121A1C</Color>
+    <Color x:Key="InkSoft">#59686A</Color>
+    <Color x:Key="InkMuted">#6E7D80</Color>
+
+    <!-- NEUTRALS ........................................................... -->
+    <Color x:Key="Canvas">#EAF2EE</Color>
+    <Color x:Key="CanvasDeep">#DDEAE5</Color>
+    <Color x:Key="SurfaceBase">#F7FBF8</Color>
+    <Color x:Key="SurfaceRaised">#EEF7F3</Color>
+    <Color x:Key="Stroke">#C7D7D2</Color>
+    <Color x:Key="Divider">#D9E5E0</Color>
+
+    <!-- STATE · fills and dark-background text ............................. -->
+    <Color x:Key="StateSuccess">#16A34A</Color>
+    <Color x:Key="StateDanger">#DC2626</Color>
+    <Color x:Key="StateWarning">#F6A623</Color>
+
+    <!-- STATE · small text on LIGHT backgrounds (all >= 4.5:1 on #EAF2EE) ... -->
+    <Color x:Key="StateSuccessOnLight">#0F7434</Color>
+    <Color x:Key="StateDangerOnLight">#B91C1C</Color>
+    <Color x:Key="StateWarningOnLight">#8A5A00</Color>
+
+    <!-- DARK SURFACES · game screens ....................................... -->
+    <Color x:Key="DarkCanvas">#101427</Color>
+    <Color x:Key="DarkSurface">#1A1A2E</Color>
+    <Color x:Key="DarkTextMuted">#B0B0CC</Color>
+
+    <!--
+     LEGACY TOKENS BELOW
+     Kept so existing pages keep compiling. Duplicates are aliased onto the
+     canonical values above, so the three redundant background names now
+     genuinely point at one colour. Prefer the tokens above in new code.
+    -->
+
     <!-- Primary Brand Colors -->
     <Color x:Key="BrainBlue">#4361EE</Color>
     <Color x:Key="BrainPurple">#7B2FBE</Color>

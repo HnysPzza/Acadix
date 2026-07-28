@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AcadsJulie.Views.ProfilePage"
-             BackgroundColor="{StaticResource PageBackground}"
+             BackgroundColor="{StaticResource MobileCanvas}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
@@ -281,16 +281,16 @@
                 <VerticalStackLayout Spacing="4">
                     <Button Text="Reset All Progress"
                             BackgroundColor="Transparent"
-                            TextColor="#FF4D6D"
-                            FontSize="14"
+                            TextColor="{StaticResource StateDangerOnLight}"
+                            FontSize="{StaticResource TextCallout}"
                             Clicked="OnResetProgressClicked"/>
 
                     <BoxView HeightRequest="1" Color="#FFCCCC" Margin="0,4"/>
 
                     <Button Text="Delete My Account"
                             BackgroundColor="Transparent"
-                            TextColor="#FF4D6D"
-                            FontSize="14"
+                            TextColor="{StaticResource StateDangerOnLight}"
+                            FontSize="{StaticResource TextCallout}"
                             FontAttributes="Bold"
                             Clicked="OnDeleteAccountClicked"/>
 

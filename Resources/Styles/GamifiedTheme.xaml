@@ -4,6 +4,24 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <!-- Palette -->
+    <!--
+    ==========================================================================
+     DEPRECATED PALETTE   DO NOT USE IN NEW CODE
+    ==========================================================================
+
+     This is a third, competing colour set (Duolingo-style green #58CC02 /
+     blue #1CB0F6 / red #FF4B4B) that does not match the Acadix brand palette
+     of teal #0F766E + coral #F9735B defined in Colors.xaml.
+
+     Its only consumer is Views/Games/QuestionView.xaml, which is DEAD CODE:
+     the ContentView is never instantiated anywhere in the app. Only
+     QuestionViewModel is registered in MauiProgram.cs, and nothing resolves
+     the view itself.
+
+     Kept solely so the orphaned view still compiles. If QuestionView is ever
+     revived, restyle it against Colors.xaml first, then delete this file.
+    ==========================================================================
+    -->
     <Color x:Key="GamifiedPageBg">#FFFFFF</Color>
     <Color x:Key="GamifiedCardBg">#FFFFFF</Color>
     <Color x:Key="GamifiedCardStroke">#E5E5E5</Color>

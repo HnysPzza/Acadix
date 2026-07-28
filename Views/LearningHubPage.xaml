@@ -80,15 +80,15 @@
             <Border x:Name="StatsBorder" Stroke="{StaticResource MobileStroke}" StrokeShape="RoundRectangle 24" Padding="16" BackgroundColor="{StaticResource MobileSurfaceRaised}">
                 <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
-                        <Label x:Name="DailyStreakLabel" Text="🔥 0" FontSize="20" FontAttributes="Bold" TextColor="#FF6B6B" HorizontalOptions="Center"/>
+                        <Label x:Name="DailyStreakLabel" Text="🔥 0" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource AccentOnLight}" HorizontalOptions="Center"/>
                         <Label Text="Day Streak" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                     <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="4">
-                        <Label x:Name="TasksDoneLabel" Text="✅ 0" FontSize="20" FontAttributes="Bold" TextColor="#10B981" HorizontalOptions="Center"/>
+                        <Label x:Name="TasksDoneLabel" Text="✅ 0" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource StateSuccessOnLight}" HorizontalOptions="Center"/>
                         <Label Text="Tasks Done" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                     <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="4">
-                        <Label x:Name="MinutesLearnedLabel" Text="⏱️ 0" FontSize="20" FontAttributes="Bold" TextColor="#4361EE" HorizontalOptions="Center"/>
+                        <Label x:Name="MinutesLearnedLabel" Text="⏱️ 0" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Brand}" HorizontalOptions="Center"/>
                         <Label Text="Minutes" FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Grid>

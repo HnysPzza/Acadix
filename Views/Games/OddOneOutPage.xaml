@@ -6,7 +6,7 @@
              x:Class="AcadsJulie.Views.Games.OddOneOutPage"
              x:DataType="viewmodels:OddOneOutViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="#1A1A2E">
+             BackgroundColor="{StaticResource DarkSurface}">
 
     <ContentPage.Resources>
         <Style x:Key="GlassCardStyle" TargetType="Border">

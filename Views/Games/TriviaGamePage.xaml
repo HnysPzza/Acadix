@@ -7,7 +7,7 @@
              x:Class="AcadsJulie.Views.Games.TriviaGamePage"
              x:DataType="viewmodels:TriviaViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="#101427">
+             BackgroundColor="{StaticResource DarkSurface}">
 
     <Grid>
         <Grid x:Name="BackgroundLayer">
@@ -201,7 +201,7 @@
                        FontFamily="{StaticResource FontHeading}"
                        FontSize="{StaticResource TextLabel}"
                        CharacterSpacing="2.4"
-                       TextColor="#7C8AA5"
+                       TextColor="{StaticResource DarkTextMuted}"
                        HorizontalOptions="Start"/>
 
                 <Label Text="Finding fresh questions"
@@ -225,7 +225,7 @@
 
                 <Label Text="Open Trivia DB"
                        FontSize="{StaticResource TextCaption}"
-                       TextColor="#7480A0"
+                       TextColor="{StaticResource DarkTextMuted}"
                        Margin="0,8,0,0"
                        HorizontalOptions="Start"/>
             </VerticalStackLayout>
