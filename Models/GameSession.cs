@@ -9,7 +9,17 @@ namespace AcadsJulie.Models
         public double Accuracy { get; set; }
         public int DurationSeconds { get; set; }
         public string Difficulty { get; set; } = "Easy";
-        public DateTime PlayedAt { get; set; } = DateTime.UtcNow;
+
+        /// <summary>
+        /// Local time the session was played.
+        /// </summary>
+        /// <remarks>
+        /// Stored in local time because every consumer buckets by local calendar day
+        /// (<c>DateTime.Today</c>) for streaks, weekly charts and daily challenges. This default
+        /// was previously <c>DateTime.UtcNow</c> while <see cref="GameResult.PlayedAt"/> used
+        /// <c>DateTime.Now</c> — in UTC+8 that put any session before 08:00 on the wrong day.
+        /// </remarks>
+        public DateTime PlayedAt { get; set; } = DateTime.Now;
     }
 
     public class GameInfo

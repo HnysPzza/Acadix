@@ -1,3 +1,5 @@
+using AcadsJulie.Services;
+
 namespace AcadsJulie.Views;
 
 public partial class NotificationsModalPage : ContentPage
@@ -10,7 +12,7 @@ public partial class NotificationsModalPage : ContentPage
 
     private void LoadNotifications()
     {
-        int lastSeenLevel = Preferences.Get("LastSeenLevel", 1);
+        int lastSeenLevel = ScopedPreferences.Get("LastSeenLevel", 1);
         var profile = App.ProfileService.GetProfile();
         
         NotificationList.Children.Clear();
@@ -47,7 +49,7 @@ public partial class NotificationsModalPage : ContentPage
             NotificationList.Children.Add(card);
 
             // Mark as read
-            Preferences.Set("LastSeenLevel", profile.Level);
+            ScopedPreferences.Set("LastSeenLevel", profile.Level);
         }
 
         if (!hasNotifications)

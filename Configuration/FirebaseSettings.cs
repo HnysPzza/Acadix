@@ -60,13 +60,18 @@ public static partial class FirebaseSettings
         return Clean(value);
     }
 
-    private static string GetLocalSetting(string key)
-    {
-        var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        ConfigureLocal(values);
+    // Built once. IsFirebaseConfigured is checked on every auth/Firestore call and each check
+    // reads several properties, so rebuilding this dictionary per read was pure waste.
+    private static readonly Lazy<IReadOnlyDictionary<string, string>> LocalValues =
+        new(() =>
+        {
+            var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            ConfigureLocal(values);
+            return values;
+        });
 
-        return values.TryGetValue(key, out var value) ? value : string.Empty;
-    }
+    private static string GetLocalSetting(string key) =>
+        LocalValues.Value.TryGetValue(key, out var value) ? value : string.Empty;
 
     private static string Clean(string value) => value.Trim().Trim('"');
 }

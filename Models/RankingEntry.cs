@@ -5,7 +5,6 @@ public class RankingEntry
     public int Rank { get; set; }
     public string Uid { get; set; } = string.Empty;
     public string DisplayName { get; set; } = "Student";
-    public string Email { get; set; } = string.Empty;
     public int BrainScore { get; set; }
     public int Level { get; set; }
     public int XP { get; set; }

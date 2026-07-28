@@ -11,7 +11,7 @@ namespace AcadsJulie.Services
         public UserProfile GetProfile()
         {
             if (_cachedProfile != null) return _cachedProfile;
-            var json = Preferences.Get(ProfileKey, null);
+            var json = ScopedPreferences.Get(ProfileKey, null);
             if (json != null)
             {
                 _cachedProfile = JsonSerializer.Deserialize<UserProfile>(json) ?? new UserProfile();
@@ -27,7 +27,7 @@ namespace AcadsJulie.Services
         {
             _cachedProfile = profile;
             var json = JsonSerializer.Serialize(profile);
-            Preferences.Set(ProfileKey, json);
+            ScopedPreferences.Set(ProfileKey, json);
             App.QueueLeaderboardSync();
         }
 

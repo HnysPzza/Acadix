@@ -373,7 +373,7 @@ public partial class HomePage : ContentPage
     {
         // Count saved notes from preferences
         _savedNotesCount = 0;
-        var allKeys = Preferences.Get("quick_note_keys", "").Split(',').Where(k => !string.IsNullOrEmpty(k)).ToList();
+        var allKeys = ScopedPreferences.Get("quick_note_keys", "").Split(',').Where(k => !string.IsNullOrEmpty(k)).ToList();
         _savedNotesCount = allKeys.Count;
         SavedNotesCountLabel.Text = $"{_savedNotesCount} saved";
     }
@@ -389,12 +389,12 @@ public partial class HomePage : ContentPage
 
         // Save note with timestamp
         var noteKey = $"quick_note_{DateTime.Now:yyyyMMdd_HHmmss}";
-        Preferences.Set(noteKey, noteText);
+        ScopedPreferences.Set(noteKey, noteText);
 
         // Track note keys
-        var existingKeys = Preferences.Get("quick_note_keys", "");
+        var existingKeys = ScopedPreferences.Get("quick_note_keys", "");
         var updatedKeys = string.IsNullOrEmpty(existingKeys) ? noteKey : $"{existingKeys},{noteKey}";
-        Preferences.Set("quick_note_keys", updatedKeys);
+        ScopedPreferences.Set("quick_note_keys", updatedKeys);
 
         // Clear editor
         QuickNoteEditor.Text = string.Empty;

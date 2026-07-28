@@ -35,6 +35,35 @@ public partial class LoginPage : ContentPage
         Application.Current!.Windows[0].Page = new RegisterPage();
     }
 
+    private async void OnForgotPasswordClicked(object? sender, EventArgs e)
+    {
+        var email = EmailEntry.Text?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            ShowError("Enter your email address first, then tap Forgot password.");
+            return;
+        }
+
+        var confirm = await DisplayAlert(
+            "Reset password",
+            $"Send a password reset link to {email}?",
+            "Send",
+            "Cancel");
+
+        if (!confirm)
+            return;
+
+        await RunBusyAsync(async () =>
+        {
+            await App.AuthService.SendPasswordResetEmailAsync(email);
+            await DisplayAlert(
+                "Check your email",
+                "If an account exists for that address, a reset link is on its way. Remember to check your spam folder.",
+                "OK");
+        }, "Sending...");
+    }
+
     private void OnTogglePasswordClicked(object? sender, EventArgs e)
     {
         PasswordEntry.IsPassword = !PasswordEntry.IsPassword;
@@ -65,6 +94,7 @@ public partial class LoginPage : ContentPage
         ErrorLabel.IsVisible = false;
         LoginButton.IsEnabled = false;
         GoogleButton.IsEnabled = false;
+        ForgotPasswordButton.IsEnabled = false;
         LoginButton.Text = busyText;
 
         try
@@ -79,6 +109,7 @@ public partial class LoginPage : ContentPage
         {
             LoginButton.IsEnabled = true;
             GoogleButton.IsEnabled = true;
+            ForgotPasswordButton.IsEnabled = true;
             LoginButton.Text = "Log in";
         }
     }

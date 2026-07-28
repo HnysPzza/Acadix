@@ -15,7 +15,7 @@ namespace AcadsJulie.Services
 
         public List<DailyQuest> GetTodayQuests()
         {
-            var json = Preferences.Get(QuestsKey, string.Empty);
+            var json = ScopedPreferences.Get(QuestsKey, string.Empty);
             List<DailyQuest>? quests = null;
 
             if (!string.IsNullOrEmpty(json))
@@ -24,7 +24,12 @@ namespace AcadsJulie.Services
                 {
                     quests = JsonSerializer.Deserialize<List<DailyQuest>>(json);
                 }
-                catch { }
+                catch (JsonException ex)
+                {
+                    // Corrupt quest data: fall through and regenerate rather than crash, but
+                    // leave a trace so it is not silently invisible during debugging.
+                    System.Diagnostics.Debug.WriteLine($"[QuestService] Could not read saved quests: {ex.Message}");
+                }
             }
 
             // If no quests exist or they are from a previous day, generate new ones
@@ -40,7 +45,7 @@ namespace AcadsJulie.Services
         public void SaveQuests(List<DailyQuest> quests)
         {
             var json = JsonSerializer.Serialize(quests);
-            Preferences.Set(QuestsKey, json);
+            ScopedPreferences.Set(QuestsKey, json);
         }
 
         private List<DailyQuest> GenerateQuests()

@@ -55,7 +55,7 @@ public partial class HomeViewModel : ObservableObject
 
     private void CheckLevelUp(Models.UserProfile profile)
     {
-        int lastSeenLevel = Preferences.Get("LastSeenLevel", 1);
+        int lastSeenLevel = ScopedPreferences.Get("LastSeenLevel", 1);
         if (profile.Level > lastSeenLevel)
         {
             HasUnreadNotifications = true;

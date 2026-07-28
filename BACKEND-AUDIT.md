@@ -1,5 +1,10 @@
 # Acadix — Backend Audit
 
+> **Status update (2026-07-29):** all five High findings and most Medium findings in this
+> report have since been fixed in code. See `BACKEND-SETUP.md` for the steps that must be
+> done outside the codebase (deploying the Firestore rules is the critical one).
+> This document is kept as the original findings record.
+
 **Date:** 2026-07-29
 **Scope:** `Services/`, `Configuration/`, `firebase/`, `Models/`, auth flow pages, `App.xaml.cs`, Android manifest
 **Commit audited:** `54c5971` (`Juls First Project Commit`)

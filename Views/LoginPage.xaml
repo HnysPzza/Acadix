@@ -119,6 +119,15 @@
                             </Border>
                         </VerticalStackLayout>
 
+                        <Button x:Name="ForgotPasswordButton"
+                                Text="Forgot password?"
+                                Clicked="OnForgotPasswordClicked"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource TextSecondary}"
+                                FontSize="12"
+                                Padding="0"
+                                HorizontalOptions="End"/>
+
                         <Border x:Name="ErrorBanner"
                                 IsVisible="False"
                                 Padding="12,10"

@@ -21,7 +21,14 @@ public static class AuthUiMessageMapper
             return FirebaseSettings.GoogleMissingConfigurationMessage;
         }
 
-        return string.IsNullOrWhiteSpace(message)
+        if (exception is HttpRequestException or TaskCanceledException or TimeoutException)
+            return "Can't reach the server. Check your connection and try again.";
+
+        // FirebaseAuthService/RankingService already translate backend errors into friendly
+        // text, so anything reaching here with a message is safe to show. Unknown exception
+        // types (null refs, parse errors) fall back to a generic message rather than exposing
+        // a stack-trace-flavoured string.
+        return string.IsNullOrWhiteSpace(message) || exception is not InvalidOperationException
             ? "Something went wrong. Please try again."
             : message;
     }

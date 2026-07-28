@@ -13,7 +13,13 @@ public class FirebaseAuthService
     private const string RefreshTokenKey = "firebase_refresh_token";
     private const string ExpiresAtKey = "firebase_expires_at";
 
-    private static readonly HttpClient Http = new();
+    private static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(20) };
+
+    // Serialises token refresh. Several background leaderboard syncs can ask for a valid token
+    // at once; without this they would each fire their own refresh and race to overwrite
+    // _currentSession and the SecureStorage entries.
+    private readonly SemaphoreSlim _refreshLock = new(1, 1);
+
     private FirebaseAuthSession? _currentSession;
 
     public FirebaseAuthSession? CurrentSession => _currentSession;
@@ -44,6 +50,9 @@ public class FirebaseAuthService
             RefreshToken = refreshToken,
             ExpiresAt = expiresAt
         };
+
+        // Point local storage at this account before anything reads a profile.
+        UserScope.SetUser(uid);
 
         if (_currentSession.IsExpiredSoon)
             await RefreshIdTokenAsync();
@@ -91,6 +100,47 @@ public class FirebaseAuthService
         return session;
     }
 
+    /// <summary>
+    /// Sends a Firebase password-reset email. Without this a student who forgets their
+    /// password has no way back into their account.
+    /// </summary>
+    public async Task SendPasswordResetEmailAsync(string email)
+    {
+        EnsureConfigured();
+
+        var url = $"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={FirebaseSettings.FirebaseWebApiKey}";
+        var response = await Http.PostAsJsonAsync(url, new
+        {
+            requestType = "PASSWORD_RESET",
+            email
+        });
+
+        if (!response.IsSuccessStatusCode)
+            throw new InvalidOperationException(MapFirebaseError(await response.Content.ReadAsStringAsync()));
+    }
+
+    /// <summary>
+    /// Permanently deletes the signed-in Firebase account and clears the local session.
+    /// Google Play requires an in-app deletion path for any app that offers account creation.
+    /// </summary>
+    /// <remarks>
+    /// The caller is responsible for removing this user's Firestore leaderboard entry and
+    /// local data first — once the account is gone the ID token can no longer authorise it.
+    /// </remarks>
+    public async Task DeleteAccountAsync()
+    {
+        EnsureConfigured();
+
+        var idToken = await GetValidIdTokenAsync();
+        var url = $"https://identitytoolkit.googleapis.com/v1/accounts:delete?key={FirebaseSettings.FirebaseWebApiKey}";
+        var response = await Http.PostAsJsonAsync(url, new { idToken });
+
+        if (!response.IsSuccessStatusCode)
+            throw new InvalidOperationException(MapFirebaseError(await response.Content.ReadAsStringAsync()));
+
+        await LogoutCoreAsync();
+    }
+
     public async Task<string> GetValidIdTokenAsync()
     {
         if (_currentSession == null)
@@ -102,7 +152,13 @@ public class FirebaseAuthService
         return _currentSession.IdToken;
     }
 
-    public async Task LogoutAsync()
+    public Task LogoutAsync() => LogoutCoreAsync();
+
+    /// <summary>
+    /// Clears the session. Kept separate from <see cref="LogoutAsync"/> so the refresh path can
+    /// call it while already holding <see cref="_refreshLock"/> without risking re-entry.
+    /// </summary>
+    private async Task LogoutCoreAsync()
     {
         _currentSession = null;
         SecureStorage.Default.Remove(UidKey);
@@ -110,6 +166,10 @@ public class FirebaseAuthService
         SecureStorage.Default.Remove(IdTokenKey);
         SecureStorage.Default.Remove(RefreshTokenKey);
         SecureStorage.Default.Remove(ExpiresAtKey);
+
+        // Detach local storage so the next person to sign in cannot read this account's
+        // progress or academic notes. The data stays on disk for when this user returns.
+        UserScope.ClearUser();
         await Task.CompletedTask;
     }
 
@@ -155,37 +215,56 @@ public class FirebaseAuthService
     {
         EnsureConfigured();
 
-        if (_currentSession == null || string.IsNullOrWhiteSpace(_currentSession.RefreshToken))
-            throw new InvalidOperationException("Your session has expired. Please log in again.");
-
-        var url = $"https://securetoken.googleapis.com/v1/token?key={FirebaseSettings.FirebaseWebApiKey}";
-        var content = new FormUrlEncodedContent(new Dictionary<string, string>
+        await _refreshLock.WaitAsync();
+        try
         {
-            ["grant_type"] = "refresh_token",
-            ["refresh_token"] = _currentSession.RefreshToken
-        });
+            if (_currentSession == null || string.IsNullOrWhiteSpace(_currentSession.RefreshToken))
+                throw new InvalidOperationException("Your session has expired. Please log in again.");
 
-        var response = await Http.PostAsync(url, content);
-        var json = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            await LogoutAsync();
-            throw new InvalidOperationException("Your session expired. Please log in again.");
+            // Another caller may have refreshed while we waited for the lock.
+            if (!_currentSession.IsExpiredSoon)
+                return;
+
+            var url = $"https://securetoken.googleapis.com/v1/token?key={FirebaseSettings.FirebaseWebApiKey}";
+            var content = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                ["grant_type"] = "refresh_token",
+                ["refresh_token"] = _currentSession.RefreshToken
+            });
+
+            var response = await Http.PostAsync(url, content);
+            var json = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                // Only a rejection from Firebase means the refresh token is dead. A network
+                // failure never reaches here (it throws), so we do not sign out on a blip.
+                await LogoutCoreAsync();
+                throw new InvalidOperationException("Your session expired. Please log in again.");
+            }
+
+            var payload = JsonSerializer.Deserialize<RefreshResponse>(json, JsonOptions()) ??
+                          throw new InvalidOperationException("Firebase returned an empty refresh response.");
+
+            _currentSession.IdToken = payload.IdToken;
+            _currentSession.RefreshToken = payload.RefreshToken;
+            _currentSession.Uid = payload.UserId;
+            _currentSession.ExpiresAt = DateTimeOffset.UtcNow.AddSeconds(ParseExpiresIn(payload.ExpiresIn));
+            await SaveSessionAsync(_currentSession);
         }
-
-        var payload = JsonSerializer.Deserialize<RefreshResponse>(json, JsonOptions()) ??
-                      throw new InvalidOperationException("Firebase returned an empty refresh response.");
-
-        _currentSession.IdToken = payload.IdToken;
-        _currentSession.RefreshToken = payload.RefreshToken;
-        _currentSession.Uid = payload.UserId;
-        _currentSession.ExpiresAt = DateTimeOffset.UtcNow.AddSeconds(ParseExpiresIn(payload.ExpiresIn));
-        await SaveSessionAsync(_currentSession);
+        finally
+        {
+            _refreshLock.Release();
+        }
     }
 
     private async Task SaveSessionAsync(FirebaseAuthSession session)
     {
         _currentSession = session;
+
+        // Re-point local storage before any caller reads a profile. Signing in as a different
+        // account swaps the whole scope, so nobody inherits the previous user's data.
+        UserScope.SetUser(session.Uid);
+
         await SecureStorage.Default.SetAsync(UidKey, session.Uid);
         await SecureStorage.Default.SetAsync(EmailKey, session.Email);
         await SecureStorage.Default.SetAsync(IdTokenKey, session.IdToken);
@@ -207,11 +286,24 @@ public class FirebaseAuthService
                 "EMAIL_EXISTS" => "That email is already registered.",
                 "EMAIL_NOT_FOUND" => "No account was found for that email.",
                 "INVALID_PASSWORD" => "The password is incorrect.",
-                "WEAK_PASSWORD : Password should be at least 6 characters" => "Password must be at least 6 characters.",
+                "INVALID_LOGIN_CREDENTIALS" => "That email or password is incorrect.",
                 "USER_DISABLED" => "This account has been disabled.",
                 "OPERATION_NOT_ALLOWED" => "Email/password sign-in is not enabled in Firebase.",
                 "INVALID_EMAIL" => "Enter a valid email address.",
-                _ => message ?? "Firebase authentication failed."
+                "MISSING_EMAIL" => "Enter your email address.",
+                "RESET_PASSWORD_EXCEED_LIMIT" => "Too many reset attempts. Please try again later.",
+                "CREDENTIAL_TOO_OLD_LOGIN_AGAIN" => "For security, please log in again before doing this.",
+                "TOKEN_EXPIRED" => "Your session expired. Please log in again.",
+
+                // Firebase appends detail to some codes, so match on the prefix.
+                not null when message.StartsWith("WEAK_PASSWORD", StringComparison.Ordinal)
+                    => "Password must be at least 6 characters.",
+                not null when message.StartsWith("TOO_MANY_ATTEMPTS_TRY_LATER", StringComparison.Ordinal)
+                    => "Too many attempts. Please wait a moment and try again.",
+
+                // Never surface a raw Firebase code to the user — it leaks backend detail and
+                // reads like a crash. Anything unmapped becomes a generic message.
+                _ => "Something went wrong. Please try again."
             };
         }
         catch

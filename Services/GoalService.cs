@@ -15,7 +15,7 @@ public class GoalService
         if (_cachedGoals != null)
             return _cachedGoals;
 
-        var json = Preferences.Get(GoalsKey, null);
+        var json = ScopedPreferences.Get(GoalsKey, null);
         _cachedGoals = json == null
             ? new List<Goal>()
             : JsonSerializer.Deserialize<List<Goal>>(json) ?? new List<Goal>();
@@ -60,7 +60,7 @@ public class GoalService
         if (_cachedHabits != null)
             return _cachedHabits;
 
-        var json = Preferences.Get(HabitsKey, null);
+        var json = ScopedPreferences.Get(HabitsKey, null);
         _cachedHabits = json == null
             ? new List<Habit>()
             : JsonSerializer.Deserialize<List<Habit>>(json) ?? new List<Habit>();
@@ -110,12 +110,12 @@ public class GoalService
     private void SaveGoals(List<Goal> goals)
     {
         _cachedGoals = goals;
-        Preferences.Set(GoalsKey, JsonSerializer.Serialize(goals));
+        ScopedPreferences.Set(GoalsKey, JsonSerializer.Serialize(goals));
     }
 
     private void SaveHabits(List<Habit> habits)
     {
         _cachedHabits = habits;
-        Preferences.Set(HabitsKey, JsonSerializer.Serialize(habits));
+        ScopedPreferences.Set(HabitsKey, JsonSerializer.Serialize(habits));
     }
 }

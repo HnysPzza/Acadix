@@ -95,7 +95,7 @@ public class TaskNotificationService
         
         var request = new NotificationRequest
         {
-            NotificationId = 99999,
+            NotificationId = NotificationIdAllocator.DailyOverdueCheckId,
             Title = "📚 Daily Academic Check",
             Description = "Review your pending tasks and deadlines",
             Schedule = new NotificationRequestSchedule

@@ -61,7 +61,7 @@ public class ContentLibraryService
 
     private void LoadBookmarks()
     {
-        var json = Preferences.Get(BookmarksKey, null);
+        var json = ScopedPreferences.Get(BookmarksKey, null);
         _cachedBookmarks = json == null
             ? new List<string>()
             : JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
@@ -75,7 +75,7 @@ public class ContentLibraryService
     private void SaveBookmarks()
     {
         _cachedBookmarks = GetAllContent().Where(c => c.IsBookmarked).Select(c => c.Id).ToList();
-        Preferences.Set(BookmarksKey, JsonSerializer.Serialize(_cachedBookmarks));
+        ScopedPreferences.Set(BookmarksKey, JsonSerializer.Serialize(_cachedBookmarks));
     }
 
     private List<ContentLibraryItem> GetSampleContent()

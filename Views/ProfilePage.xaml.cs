@@ -5,16 +5,16 @@ namespace AcadsJulie.Views;
 
 public partial class ProfilePage : ContentPage
 {
-    private readonly ProfileService _profileService;
-    private readonly ProgressService _progressService;
-    private readonly GoalService _goalService;
+    // Resolved on each use rather than cached in the constructor: App.ResetServices() swaps
+    // these singletons out (on account switch or progress reset), and a cached field would keep
+    // rendering the previous instance's data.
+    private static ProfileService _profileService => App.ProfileService;
+    private static ProgressService _progressService => App.ProgressService;
+    private static GoalService _goalService => App.GoalService;
 
     public ProfilePage()
     {
         InitializeComponent();
-        _profileService = App.ProfileService;
-        _progressService = App.ProgressService;
-        _goalService = App.GoalService;
     }
 
     protected override void OnAppearing()
@@ -140,11 +140,62 @@ public partial class ProfilePage : ContentPage
 
         if (confirm)
         {
-            Preferences.Clear();
+            // Only this account's data. Preferences.Clear() used to wipe every account on the
+            // device plus the auth/sync bookkeeping.
+            UserScope.ClearCurrentUserData();
             await DisplayAlertAsync("Done", "Your progress has been reset. Start fresh! 💪", "Let's Go!");
             App.ResetServices();
             App.QueueLeaderboardSync();
             LoadProfile();
+        }
+    }
+
+    private async void OnDeleteAccountClicked(object? sender, EventArgs e)
+    {
+        var confirm = await DisplayAlertAsync(
+            "Delete account?",
+            "This permanently deletes your Acadix account, your scores and your saved tasks. " +
+            "This cannot be undone.",
+            "Delete",
+            "Cancel");
+
+        if (!confirm)
+            return;
+
+        // Second confirmation: this action is irreversible, so make it deliberate.
+        var finalConfirm = await DisplayAlertAsync(
+            "Are you absolutely sure?",
+            "Last chance — your account and everything in it will be gone for good.",
+            "Yes, delete forever",
+            "Keep my account");
+
+        if (!finalConfirm)
+            return;
+
+        try
+        {
+            // Remove the public leaderboard entry while the token is still valid. Non-fatal:
+            // if it fails, the account deletion below must still go ahead.
+            try
+            {
+                await App.RankingService.DeleteCurrentUserEntryAsync();
+            }
+            catch
+            {
+                // Leaves an orphaned leaderboard row; acceptable versus blocking deletion.
+            }
+
+            // Local data first — once the account is gone we lose the UID that scopes it.
+            UserScope.ClearCurrentUserData();
+
+            await App.AuthService.DeleteAccountAsync();
+
+            await DisplayAlertAsync("Account deleted", "Your account and data have been removed.", "OK");
+            App.NavigateToLogin();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Couldn't delete account", AuthUiMessageMapper.ToUserMessage(ex), "OK");
         }
     }
 

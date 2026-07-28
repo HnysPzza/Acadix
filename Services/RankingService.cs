@@ -9,7 +9,7 @@ namespace AcadsJulie.Services;
 public class RankingService
 {
     private const string InitialSyncPrefix = "leaderboard_initial_sync_";
-    private static readonly HttpClient Http = new();
+    private static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(20) };
 
     private readonly FirebaseAuthService _authService;
     private readonly ProfileService _profileService;
@@ -47,11 +47,13 @@ public class RankingService
         var sessions = _progressService.GetSessions();
         var session = _authService.CurrentSession;
 
+        // NOTE: the user's email is deliberately not published here. The leaderboard is readable
+        // by every signed-in user, so writing it would expose every student's address. The UI
+        // only ever displays displayName.
         var fields = new Dictionary<string, object>
         {
             ["uid"] = StringField(session.Uid),
             ["displayName"] = StringField(profile.Name),
-            ["email"] = StringField(session.Email),
             ["brainScore"] = IntegerField(profile.BrainScore),
             ["level"] = IntegerField(profile.Level),
             ["xp"] = IntegerField(profile.XP),
@@ -65,6 +67,32 @@ public class RankingService
         using var request = new HttpRequestMessage(HttpMethod.Patch, url);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _authService.GetValidIdTokenAsync());
         request.Content = JsonContent(new { fields });
+
+        using var response = await Http.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+            throw new InvalidOperationException(await ReadFirestoreErrorAsync(response));
+    }
+
+    /// <summary>
+    /// Removes the signed-in user's leaderboard entry. Must run before the Firebase account is
+    /// deleted, while the ID token can still authorise the request.
+    /// </summary>
+    /// <remarks>
+    /// Requires the owner-delete rule in firebase/firestore.rules. Callers should treat failure
+    /// as non-fatal — account deletion itself must still proceed.
+    /// </remarks>
+    public async Task DeleteCurrentUserEntryAsync()
+    {
+        EnsureConfigured();
+
+        if (!_authService.IsSignedIn || _authService.CurrentSession == null)
+            return;
+
+        var uid = _authService.CurrentSession.Uid;
+        var url = $"{DocumentsBaseUrl()}/leaderboards/global/users/{Uri.EscapeDataString(uid)}";
+
+        using var request = new HttpRequestMessage(HttpMethod.Delete, url);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _authService.GetValidIdTokenAsync());
 
         using var response = await Http.SendAsync(request);
         if (!response.IsSuccessStatusCode)
@@ -103,7 +131,6 @@ public class RankingService
                 Rank = rank++,
                 Uid = uid,
                 DisplayName = GetString(fields, "displayName", "Student"),
-                Email = GetString(fields, "email"),
                 BrainScore = GetInt(fields, "brainScore"),
                 Level = GetInt(fields, "level"),
                 XP = GetInt(fields, "xp"),
@@ -168,18 +195,23 @@ public class RankingService
         return DateTimeOffset.MinValue;
     }
 
+    /// <summary>
+    /// Turns a Firestore error response into something safe to show a student. The raw text
+    /// exposes project internals ("Missing or insufficient permissions", rule paths), so it is
+    /// mapped by status code instead of being passed through.
+    /// </summary>
     private static async Task<string> ReadFirestoreErrorAsync(HttpResponseMessage response)
     {
-        var json = await response.Content.ReadAsStringAsync();
-        try
+        // Drain the body so the connection is reused, even though we do not display it.
+        _ = await response.Content.ReadAsStringAsync();
+
+        return (int)response.StatusCode switch
         {
-            using var doc = JsonDocument.Parse(json);
-            var message = doc.RootElement.GetProperty("error").GetProperty("message").GetString();
-            return string.IsNullOrWhiteSpace(message) ? "Firebase ranking request failed." : message;
-        }
-        catch
-        {
-            return "Firebase ranking request failed.";
-        }
+            401 or 403 => "Your session expired. Please log in again.",
+            404 => "The leaderboard is not set up yet.",
+            429 => "Too many requests right now. Please try again shortly.",
+            >= 500 => "The leaderboard service is unavailable. Please try again later.",
+            _ => "Couldn't update the leaderboard. Please try again."
+        };
     }
 }

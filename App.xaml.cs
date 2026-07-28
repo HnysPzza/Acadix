@@ -42,6 +42,13 @@ namespace AcadsJulie
             InitializeComponent();
             RankingService = new RankingService(AuthService, ProfileService, ProgressService);
             QuestService = new QuestService(ProfileService);
+
+            // Signing in as a different account must drop every cached profile/session list,
+            // otherwise the previous user's data stays in memory under the new user's name.
+            // Unsubscribe first so a re-created App cannot double-subscribe.
+            UserScope.Changed -= ResetServices;
+            UserScope.Changed += ResetServices;
+
             TaskService.ScheduleAllPendingReminders();
         }
 
@@ -59,14 +66,17 @@ namespace AcadsJulie
         protected override void OnSleep()
         {
             base.OnSleep();
-            
+
+            // Push any debounced progress before the process can be killed.
+            _ = FlushLeaderboardSyncAsync();
+
             var profile = ProfileService.GetProfile();
 
             if (profile.NotificationsEnabled)
             {
                 var notification = new NotificationRequest
                 {
-                    NotificationId = 100,
+                    NotificationId = NotificationIdAllocator.DailyStreakId,
                     Title = "Keep your streak alive! ",
                     Description = "It's time for your daily brain training session. Don't let your streak break!",
                     ReturningData = "Dummy Data",
@@ -85,7 +95,7 @@ namespace AcadsJulie
         protected override void OnResume()
         {
             base.OnResume();
-            LocalNotificationCenter.Current.Cancel(100);
+            LocalNotificationCenter.Current.Cancel(NotificationIdAllocator.DailyStreakId);
             TaskService.ScheduleAllPendingReminders();
         }
 
@@ -121,22 +131,79 @@ namespace AcadsJulie
             Current!.Windows[0].Page = new LoginPage();
         }
 
+        // Finishing one game touches the profile many times (XP, category score, challenge,
+        // quests, badges), and every touch used to fire its own Firestore write — up to nine
+        // per game. These fields coalesce that burst into a single delayed write.
+        private static readonly SemaphoreSlim SyncGate = new(1, 1);
+        private static readonly TimeSpan SyncDebounce = TimeSpan.FromSeconds(5);
+        private static int _syncQueued;
+
+        /// <summary>
+        /// Requests a leaderboard sync. Calls made while one is pending are absorbed into it,
+        /// so a burst of profile saves results in one upload rather than one per save.
+        /// </summary>
         public static void QueueLeaderboardSync()
         {
             if (!AuthService.IsSignedIn)
+                return;
+
+            // Already a flush pending: it will pick up whatever we just saved.
+            if (Interlocked.Exchange(ref _syncQueued, 1) == 1)
                 return;
 
             _ = Task.Run(async () =>
             {
                 try
                 {
-                    await RankingService.SyncCurrentUserAsync();
+                    await Task.Delay(SyncDebounce);
+                    Interlocked.Exchange(ref _syncQueued, 0);
+
+                    await SyncGate.WaitAsync();
+                    try
+                    {
+                        if (AuthService.IsSignedIn)
+                            await RankingService.SyncCurrentUserAsync();
+                    }
+                    finally
+                    {
+                        SyncGate.Release();
+                    }
                 }
                 catch
                 {
                     // Leaderboard sync should never block local gameplay progress.
+                    Interlocked.Exchange(ref _syncQueued, 0);
                 }
             });
+        }
+
+        /// <summary>
+        /// Uploads any pending progress immediately. Called when the app goes to the background
+        /// so a debounced write is not lost if the process is killed.
+        /// </summary>
+        public static async Task FlushLeaderboardSyncAsync()
+        {
+            if (!AuthService.IsSignedIn)
+                return;
+
+            Interlocked.Exchange(ref _syncQueued, 0);
+
+            try
+            {
+                await SyncGate.WaitAsync();
+                try
+                {
+                    await RankingService.SyncCurrentUserAsync();
+                }
+                finally
+                {
+                    SyncGate.Release();
+                }
+            }
+            catch
+            {
+                // Best effort — never block app suspension.
+            }
         }
     }
 }

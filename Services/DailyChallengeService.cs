@@ -22,7 +22,7 @@ namespace AcadsJulie.Services
 
         public DailyChallenge GetTodayChallenge()
         {
-            var json = Preferences.Get(ChallengeKey, null);
+            var json = ScopedPreferences.Get(ChallengeKey, null);
             if (json != null)
             {
                 var stored = JsonSerializer.Deserialize<DailyChallenge>(json);
@@ -143,7 +143,7 @@ namespace AcadsJulie.Services
 
         private void SaveChallenge(DailyChallenge challenge)
         {
-            Preferences.Set(ChallengeKey, JsonSerializer.Serialize(challenge));
+            ScopedPreferences.Set(ChallengeKey, JsonSerializer.Serialize(challenge));
         }
 
         private void AddToHistory(DailyChallenge challenge)
@@ -152,12 +152,12 @@ namespace AcadsJulie.Services
             if (!history.Any(h => h.Date.Date == challenge.Date.Date))
                 history.Insert(0, challenge);
             if (history.Count > 7) history = history.Take(7).ToList();
-            Preferences.Set(HistoryKey, JsonSerializer.Serialize(history));
+            ScopedPreferences.Set(HistoryKey, JsonSerializer.Serialize(history));
         }
 
         public List<DailyChallenge> GetHistory()
         {
-            var json = Preferences.Get(HistoryKey, null);
+            var json = ScopedPreferences.Get(HistoryKey, null);
             return json != null ? JsonSerializer.Deserialize<List<DailyChallenge>>(json) ?? [] : [];
         }
 

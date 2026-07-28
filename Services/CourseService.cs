@@ -127,7 +127,7 @@ public class CourseService
         if (_cachedProgress != null)
             return _cachedProgress;
 
-        var json = Preferences.Get(ProgressKey, null);
+        var json = ScopedPreferences.Get(ProgressKey, null);
         _cachedProgress = json == null
             ? new Dictionary<string, CourseProgress>()
             : JsonSerializer.Deserialize<Dictionary<string, CourseProgress>>(json) ?? new Dictionary<string, CourseProgress>();
@@ -140,12 +140,12 @@ public class CourseService
         var allProgress = GetAllProgress();
         allProgress[courseId] = progress;
         _cachedProgress = allProgress;
-        Preferences.Set(ProgressKey, JsonSerializer.Serialize(allProgress));
+        ScopedPreferences.Set(ProgressKey, JsonSerializer.Serialize(allProgress));
     }
 
     private List<string> GetEnrolledCourseIds()
     {
-        var json = Preferences.Get(EnrolledCoursesKey, null);
+        var json = ScopedPreferences.Get(EnrolledCoursesKey, null);
         return json == null
             ? new List<string>()
             : JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
@@ -153,7 +153,7 @@ public class CourseService
 
     private void SaveEnrolledCourseIds(List<string> ids)
     {
-        Preferences.Set(EnrolledCoursesKey, JsonSerializer.Serialize(ids));
+        ScopedPreferences.Set(EnrolledCoursesKey, JsonSerializer.Serialize(ids));
     }
 
     private List<LearningPath> GetSampleCourses()

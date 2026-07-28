@@ -6,29 +6,55 @@ namespace AcadsJulie.Services
     public class ProgressService
     {
         private const string SessionsKey = "game_sessions";
+        private const int MaxStoredSessions = 200;
+
+        // Guards _cachedSessions. The leaderboard sync reads sessions on a background thread
+        // while gameplay adds to them on the UI thread, so the list must never be enumerated
+        // and mutated at the same time.
+        private readonly object _sessionsLock = new();
         private List<GameSession>? _cachedSessions;
 
+        /// <summary>
+        /// Returns a snapshot of stored sessions. This is a copy: callers cannot mutate the
+        /// cache by accident, and the result is safe to enumerate while gameplay continues.
+        /// </summary>
         public List<GameSession> GetSessions()
         {
-            if (_cachedSessions != null) return _cachedSessions;
-            var json = Preferences.Get(SessionsKey, null);
-            if (json != null)
-                _cachedSessions = JsonSerializer.Deserialize<List<GameSession>>(json) ?? [];
-            else
-                _cachedSessions = [];
-            return _cachedSessions;
+            lock (_sessionsLock)
+            {
+                return new List<GameSession>(LoadSessionsLocked());
+            }
         }
 
         public void AddSession(GameSession session)
         {
-            var sessions = GetSessions();
-            sessions.Add(session);
-            // Keep only last 200 sessions
-            if (sessions.Count > 200)
-                sessions = sessions.Skip(sessions.Count - 200).ToList();
-            _cachedSessions = sessions;
-            Preferences.Set(SessionsKey, JsonSerializer.Serialize(sessions));
+            lock (_sessionsLock)
+            {
+                var sessions = LoadSessionsLocked();
+                sessions.Add(session);
+
+                // Keep only the most recent sessions.
+                if (sessions.Count > MaxStoredSessions)
+                    sessions.RemoveRange(0, sessions.Count - MaxStoredSessions);
+
+                ScopedPreferences.Set(SessionsKey, JsonSerializer.Serialize(sessions));
+            }
+
             App.QueueLeaderboardSync();
+        }
+
+        /// <summary>Loads (once) the backing list. Caller must hold <see cref="_sessionsLock"/>.</summary>
+        private List<GameSession> LoadSessionsLocked()
+        {
+            if (_cachedSessions != null)
+                return _cachedSessions;
+
+            var json = ScopedPreferences.Get(SessionsKey, null);
+            _cachedSessions = json == null
+                ? []
+                : JsonSerializer.Deserialize<List<GameSession>>(json) ?? [];
+
+            return _cachedSessions;
         }
 
         public CategoryProgress GetCategoryProgress(string category)

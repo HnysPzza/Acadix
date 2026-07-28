@@ -6,6 +6,7 @@ namespace AcadsJulie.Services;
 public class TaskService
 {
     private const string TasksKey = "academic_tasks";
+    private const string NotificationIdMigrationKey = "notification_ids_migrated";
     private List<AcademicTask>? _cachedTasks;
     private readonly TaskNotificationService _notificationService;
 
@@ -14,12 +15,37 @@ public class TaskService
         if (_cachedTasks != null)
             return _cachedTasks;
 
-        var json = Preferences.Get(TasksKey, null);
+        var json = ScopedPreferences.Get(TasksKey, null);
         _cachedTasks = json == null
             ? []
             : JsonSerializer.Deserialize<List<AcademicTask>>(json) ?? [];
 
+        MigrateLegacyNotificationIds(_cachedTasks);
+
         return _cachedTasks;
+    }
+
+    /// <summary>
+    /// Tasks created before the allocator hold random IDs from the old 10000..99999 range, which
+    /// can overlap each other and future blocks. Reassign them once from the allocator.
+    /// </summary>
+    private void MigrateLegacyNotificationIds(List<AcademicTask> tasks)
+    {
+        if (ScopedPreferences.Get(NotificationIdMigrationKey, false))
+            return;
+
+        ScopedPreferences.Set(NotificationIdMigrationKey, true);
+
+        if (tasks.Count == 0)
+            return;
+
+        foreach (var task in tasks)
+        {
+            _notificationService.CancelTaskNotifications(task);
+            task.NotificationId = NotificationIdAllocator.Next();
+        }
+
+        SaveTasks(tasks);
     }
 
     public List<AcademicTask> GetSortedTasks()
@@ -131,7 +157,7 @@ public class TaskService
     private void SaveTasks(List<AcademicTask> tasks)
     {
         _cachedTasks = tasks;
-        Preferences.Set(TasksKey, JsonSerializer.Serialize(tasks));
+        ScopedPreferences.Set(TasksKey, JsonSerializer.Serialize(tasks));
     }
 
     private static int GetPriorityWeight(string priority)
