@@ -38,7 +38,7 @@
                             <Label x:Name="PlannerIcon" Text="📋" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
                         <Label Text="Academic Planner" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                        <Button Text="Open planner" Clicked="OnOpenPlannerClicked" BackgroundColor="{StaticResource MobilePrimaryMuted}" TextColor="{StaticResource MobilePrimaryDark}" CornerRadius="18" HeightRequest="40" FontAttributes="Bold" Margin="0,4,0,0" />
+                        <Button Text="Open planner" Clicked="OnOpenPlannerClicked" BackgroundColor="{StaticResource MobilePrimaryMuted}" TextColor="{StaticResource MobilePrimaryDark}" CornerRadius="18" HeightRequest="44" FontAttributes="Bold" Margin="0,4,0,0" />
                     </VerticalStackLayout>
                 </Border>
 
@@ -49,7 +49,7 @@
                             <Label x:Name="GuidanceIcon" Text="🎓" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
                         <Label Text="Academic Guidance" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                        <Button Text="Open guidance" Clicked="OnOpenGuidanceClicked" BackgroundColor="#FFE4D9" TextColor="#9F3527" CornerRadius="18" HeightRequest="40" FontAttributes="Bold" Margin="0,4,0,0" />
+                        <Button Text="Open guidance" Clicked="OnOpenGuidanceClicked" BackgroundColor="#FFE4D9" TextColor="#9F3527" CornerRadius="18" HeightRequest="44" FontAttributes="Bold" Margin="0,4,0,0" />
                     </VerticalStackLayout>
                 </Border>
 
@@ -60,7 +60,7 @@
                             <Label x:Name="LibraryIcon" Text="📖" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
                         <Label Text="Content Library" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                        <Button Text="Browse library" Clicked="OnOpenLibraryClicked" BackgroundColor="#FFF0C2" TextColor="#7A4B00" CornerRadius="18" HeightRequest="40" FontAttributes="Bold" Margin="0,4,0,0" />
+                        <Button Text="Browse library" Clicked="OnOpenLibraryClicked" BackgroundColor="#FFF0C2" TextColor="#7A4B00" CornerRadius="18" HeightRequest="44" FontAttributes="Bold" Margin="0,4,0,0" />
                     </VerticalStackLayout>
                 </Border>
 
@@ -71,7 +71,7 @@
                             <Label x:Name="CoursesIcon" Text="📚" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
                         <Label Text="Courses" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                        <Button Text="Browse courses" Clicked="OnOpenCoursesClicked" BackgroundColor="#E4E8FF" TextColor="{StaticResource MobileIndigo}" CornerRadius="18" HeightRequest="40" FontAttributes="Bold" Margin="0,4,0,0" />
+                        <Button Text="Browse courses" Clicked="OnOpenCoursesClicked" BackgroundColor="#E4E8FF" TextColor="{StaticResource MobileIndigo}" CornerRadius="18" HeightRequest="44" FontAttributes="Bold" Margin="0,4,0,0" />
                     </VerticalStackLayout>
                 </Border>
             </Grid>

@@ -72,6 +72,27 @@ public static class TriviaThemeService
                 AccentColor = "#B0E0E6",
                 DisplayName = "Animals (Air)"
             },
+            "Geography_Default" or "Geography_WorldGeography" => new TriviaTheme
+            {
+                PrimaryColor = "#14532D",
+                SecondaryColor = "#2D6A4F",
+                AccentColor = "#74C69D",
+                DisplayName = "Geography"
+            },
+            "Computers_Default" or "Computers_Computing" => new TriviaTheme
+            {
+                PrimaryColor = "#111827",
+                SecondaryColor = "#1F2937",
+                AccentColor = "#38BDF8",
+                DisplayName = "Computers"
+            },
+            "Mythology_Default" or "Mythology_Myths" => new TriviaTheme
+            {
+                PrimaryColor = "#4C1D95",
+                SecondaryColor = "#6D28D9",
+                AccentColor = "#C4B5FD",
+                DisplayName = "Mythology"
+            },
             _ => new TriviaTheme
             {
                 PrimaryColor = "#134E4A",

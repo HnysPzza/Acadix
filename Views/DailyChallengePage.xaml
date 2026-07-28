@@ -96,7 +96,7 @@
                                         <Label Text="XP Reward" FontSize="10" TextColor="{StaticResource TextSecondary}"/>
                                         <Label x:Name="RewardXPLabel" Text="+100 XP"
                                                FontSize="14" FontAttributes="Bold"
-                                               TextColor="{StaticResource MobileCoral}" />
+                                               TextColor="{StaticResource MobileCoralOnLight}" />
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
                             </Frame>

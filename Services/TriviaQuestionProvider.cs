@@ -298,6 +298,9 @@ public class TriviaQuestionProvider
             ("Space",   ["Astronomy", "SpaceExploration"]),
             ("Biology", ["HumanBody", "Cells", "Ecology", "Biology"]),
             ("Animals", ["Land", "Sea", "Air"]),
+            ("Geography", ["WorldGeography"]),
+            ("Computers", ["Computing"]),
+            ("Mythology", ["Myths"]),
             ("General", ["GeneralKnowledge"])
         ];
 

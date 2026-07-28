@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!--
+        ACADIX TYPE SCALE
+        =================
+        The app currently uses 27 distinct font sizes (10,11,12,13,14,15,16,18,20,22,23,24,26,
+        28,30,31,32,34,36,38,40,42,48,50,64,80,96). Sizes like 23 and 31 are almost certainly
+        typos. That many steps means there is no visual hierarchy — everything competes.
+
+        This is a 7-step scale. Every new label should use one of these tokens, and existing
+        screens should migrate to the nearest step as they are touched.
+
+        Migration map (old → token):
+            10, 11        → TextCaption   (11)
+            12, 13        → TextLabel     (12)
+            14, 15        → TextCallout   (14)
+            16, 18        → TextBody      (16)
+            20, 22, 23    → TextHeadline  (20)
+            24, 26, 28    → TextTitle     (28)
+            30+           → TextDisplay   (40) or a deliberate one-off hero size
+
+        NOTE ON FONT PAIRING
+        ────────────────────
+        A display/body font pairing (e.g. Geist or Bricolage Grotesque for headings against
+        OpenSans for body) is the single highest-impact change for removing the "framework
+        default" look. It is deliberately NOT wired up here because only OpenSans is bundled,
+        and shipping a FontFamily reference to a file that does not exist would break the build.
+
+        To adopt it later:
+          1. Drop the .ttf files into Resources/Fonts/
+          2. Register them in MauiProgram.cs ConfigureFonts(...)
+          3. Set FontHeading below to the new family name
+        Body text should stay OpenSans — it is a genuinely good UI text face.
+    -->
+
+    <x:String x:Key="FontHeading">OpenSansSemibold</x:String>
+    <x:String x:Key="FontBody">OpenSansRegular</x:String>
+
+    <!-- Scale -->
+    <x:Double x:Key="TextDisplay">40</x:Double>
+    <x:Double x:Key="TextTitle">28</x:Double>
+    <x:Double x:Key="TextHeadline">20</x:Double>
+    <x:Double x:Key="TextBody">16</x:Double>
+    <x:Double x:Key="TextCallout">14</x:Double>
+    <x:Double x:Key="TextLabel">12</x:Double>
+    <x:Double x:Key="TextCaption">11</x:Double>
+
+    <!--
+        RADIUS SCALE
+        ============
+        Was 12 different values (2,3,12,14,16,18,20,22,24,32,35,60). Three tiers is enough:
+        small controls, cards, and fully-rounded hero/pill shapes.
+    -->
+    <x:Double x:Key="RadiusSmall">8</x:Double>
+    <x:Double x:Key="RadiusMedium">16</x:Double>
+    <x:Double x:Key="RadiusLarge">28</x:Double>
+
+    <!--
+        SPACING (8pt grid)
+        ==================
+        Use these instead of arbitrary margins so vertical rhythm stays consistent.
+    -->
+    <x:Double x:Key="Space1">4</x:Double>
+    <x:Double x:Key="Space2">8</x:Double>
+    <x:Double x:Key="Space3">12</x:Double>
+    <x:Double x:Key="Space4">16</x:Double>
+    <x:Double x:Key="Space5">20</x:Double>
+    <x:Double x:Key="Space6">24</x:Double>
+    <x:Double x:Key="Space8">32</x:Double>
+
+    <!--
+        MINIMUM TOUCH TARGET
+        ====================
+        Apple HIG requires 44pt, Material 48dp. Several buttons in the app are 40. Any control
+        a finger touches should be at least this tall.
+    -->
+    <x:Double x:Key="TouchTargetMin">44</x:Double>
+
+    <!-- Semantic label styles. Opt-in: apply with Style="{StaticResource ...}". -->
+
+    <Style x:Key="DisplayLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontHeading}" />
+        <Setter Property="FontSize" Value="{StaticResource TextDisplay}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="1.1" />
+    </Style>
+
+    <Style x:Key="TitleLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontHeading}" />
+        <Setter Property="FontSize" Value="{StaticResource TextTitle}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="1.2" />
+    </Style>
+
+    <Style x:Key="HeadlineLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontHeading}" />
+        <Setter Property="FontSize" Value="{StaticResource TextHeadline}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="1.25" />
+    </Style>
+
+    <Style x:Key="BodyLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontBody}" />
+        <Setter Property="FontSize" Value="{StaticResource TextBody}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LineHeight" Value="1.5" />
+    </Style>
+
+    <Style x:Key="CalloutLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontBody}" />
+        <Setter Property="FontSize" Value="{StaticResource TextCallout}" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="LineHeight" Value="1.45" />
+    </Style>
+
+    <!-- Section eyebrow / field label. ALL CAPS needs tracking to stay legible. -->
+    <Style x:Key="LabelText" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontHeading}" />
+        <Setter Property="FontSize" Value="{StaticResource TextLabel}" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="CharacterSpacing" Value="0.6" />
+    </Style>
+
+    <Style x:Key="CaptionLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontBody}" />
+        <Setter Property="FontSize" Value="{StaticResource TextCaption}" />
+        <Setter Property="TextColor" Value="{StaticResource TextMuted}" />
+    </Style>
+
+</ResourceDictionary>

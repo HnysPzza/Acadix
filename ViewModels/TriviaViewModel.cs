@@ -196,7 +196,10 @@ public partial class TriviaViewModel : ObservableObject
             CurrentQuestion = new TriviaQuestion
             {
                 QuestionText = batch.UsedOfflineFallback
-                    ? "Couldn't load questions. Check your connection and try again."
+                    ? TriviaCategoryMap.IsOnlineOnly(Field)
+                        // These categories have no local questions to fall back on.
+                        ? $"{Field} needs an internet connection. Reconnect, or try History, Science or General to play offline."
+                        : "Couldn't load questions. Check your connection and try again."
                     : "No questions available for this category yet. Please try another category."
             };
             ShuffledOptions.Clear();

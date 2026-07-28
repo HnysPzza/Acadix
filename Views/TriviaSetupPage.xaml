@@ -30,14 +30,14 @@
                             BackgroundColor="{StaticResource MobileSurfaceRaised}" TextColor="{StaticResource TextPrimary}"
                             CornerRadius="18" WidthRequest="44" HeightRequest="44"
                             Command="{Binding GoBackCommand}"/>
-                    <Label Grid.Column="1" Text="Knowledge Quiz Setup" TextColor="{StaticResource TextPrimary}"
-                           FontSize="24" FontAttributes="Bold"
+                    <Label Grid.Column="1" Text="Knowledge Quiz Setup"
+                           Style="{StaticResource HeadlineLabel}"
                            HorizontalOptions="Center" VerticalOptions="Center"/>
                 </Grid>
 
                 <Border Style="{StaticResource ModernCardBorder}" Padding="16">
                     <VerticalStackLayout Spacing="12">
-                        <Label Text="Select Category" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="Select Category" Style="{StaticResource HeadlineLabel}" />
                         <CollectionView ItemsSource="{Binding Fields}" SelectionMode="None">
                             <CollectionView.ItemsLayout>
                                 <GridItemsLayout Orientation="Vertical" Span="2" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
@@ -105,6 +105,30 @@
                                             <MultiTrigger TargetType="Border">
                                                 <MultiTrigger.Conditions>
                                                     <BindingCondition Binding="{Binding IsSelected}" Value="True" />
+                                                    <BindingCondition Binding="{Binding Key}" Value="Geography" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="BackgroundColor" Value="#DCFCE7" />
+                                                <Setter Property="Stroke" Value="#15803D" />
+                                            </MultiTrigger>
+                                            <MultiTrigger TargetType="Border">
+                                                <MultiTrigger.Conditions>
+                                                    <BindingCondition Binding="{Binding IsSelected}" Value="True" />
+                                                    <BindingCondition Binding="{Binding Key}" Value="Computers" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="BackgroundColor" Value="#E0F2FE" />
+                                                <Setter Property="Stroke" Value="#0369A1" />
+                                            </MultiTrigger>
+                                            <MultiTrigger TargetType="Border">
+                                                <MultiTrigger.Conditions>
+                                                    <BindingCondition Binding="{Binding IsSelected}" Value="True" />
+                                                    <BindingCondition Binding="{Binding Key}" Value="Mythology" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="BackgroundColor" Value="#EDE9FE" />
+                                                <Setter Property="Stroke" Value="#6D28D9" />
+                                            </MultiTrigger>
+                                            <MultiTrigger TargetType="Border">
+                                                <MultiTrigger.Conditions>
+                                                    <BindingCondition Binding="{Binding IsSelected}" Value="True" />
                                                     <BindingCondition Binding="{Binding Key}" Value="General" />
                                                 </MultiTrigger.Conditions>
                                                 <Setter Property="BackgroundColor" Value="{StaticResource MobilePrimaryMuted}" />
@@ -124,7 +148,7 @@
 
                 <Border Style="{StaticResource ModernCardBorder}" Padding="16">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Scope" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="Scope" Style="{StaticResource HeadlineLabel}" />
                         <HorizontalStackLayout Spacing="10" IsVisible="{Binding ShowHistoryScope}">
                             <Border Style="{StaticResource ChoiceChipBorder}" Padding="12,8">
                                 <Border.GestureRecognizers>
@@ -199,7 +223,7 @@
 
                 <Border Style="{StaticResource ModernCardBorder}" Padding="16">
                     <VerticalStackLayout Spacing="12">
-                        <Label Text="Difficulty" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="Difficulty" Style="{StaticResource HeadlineLabel}" />
                         <CollectionView ItemsSource="{Binding Difficulties}" SelectionMode="None">
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
@@ -230,15 +254,40 @@
                 </Border>
 
                 <Label Text="{Binding SelectedSummary}"
-                       FontSize="14"
-                       TextColor="{StaticResource TextSecondary}"
+                       Style="{StaticResource CalloutLabel}"
                        HorizontalTextAlignment="Center"
                        Margin="0,4,0,0"/>
 
+                <!--
+                    Warn before the player commits. These categories have no local questions,
+                    so offline they would hit a dead end after tapping Start.
+                -->
+                <Border IsVisible="{Binding IsOnlineOnlyCategory}"
+                        BackgroundColor="{StaticResource MobileAmberMuted}"
+                        Stroke="{StaticResource MobileAmber}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 16"
+                        Padding="14,10"
+                        Margin="0,2,0,0">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Text="📶"
+                               FontSize="{StaticResource TextBody}"
+                               VerticalOptions="Start"/>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Needs internet"
+                                   FontFamily="{StaticResource FontHeading}"
+                                   FontSize="{StaticResource TextCallout}"
+                                   TextColor="{StaticResource MobileAmberOnLight}"/>
+                            <Label Text="This category has no offline questions. Pick History, Science or General to play without a connection."
+                                   Style="{StaticResource CaptionLabel}"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
                 <Label Text="{Binding SourceSummary}"
-                       FontSize="11"
-                       TextColor="{StaticResource TextSecondary}"
-                       Opacity="0.75"
+                       Style="{StaticResource CaptionLabel}"
+                       IsVisible="{Binding ShowSourceSummary}"
                        HorizontalTextAlignment="Center"
                        Margin="16,0"/>
 

@@ -27,6 +27,10 @@ public partial class TriviaSetupViewModel : ObservableObject
         new() { Key = "Space", Title = "Space", Icon = "🚀" },
         new() { Key = "Biology", Title = "Biology", Icon = "🧬" },
         new() { Key = "Animals", Title = "Animals", Icon = "🦁" },
+        // Online-only categories: no local questions exist for these, they come from OpenTDB.
+        new() { Key = "Geography", Title = "Geography", Icon = "🌍" },
+        new() { Key = "Computers", Title = "Computers", Icon = "💻" },
+        new() { Key = "Mythology", Title = "Mythology", Icon = "🏺" },
         new() { Key = "General", Title = "General", Icon = "📚", IsSelected = true }
     ];
 
@@ -55,6 +59,18 @@ public partial class TriviaSetupViewModel : ObservableObject
         TriviaCategoryMap.GetLocalOnlyReason(SelectedField, SelectedSubField)
         ?? "Fresh questions from the Open Trivia DB, with offline backup.";
 
+    /// <summary>
+    /// True for categories with no local questions. The setup screen highlights these so the
+    /// player finds out before starting, not on a dead-end screen mid-quiz.
+    /// </summary>
+    public bool IsOnlineOnlyCategory => TriviaCategoryMap.IsOnlineOnly(SelectedField);
+
+    /// <summary>
+    /// The plain source caption is hidden when the louder "needs internet" banner is showing,
+    /// so the two never stack and say the same thing twice.
+    /// </summary>
+    public bool ShowSourceSummary => !IsOnlineOnlyCategory;
+
     partial void OnSelectedFieldChanged(string value)
     {
         OnPropertyChanged(nameof(ShowHistoryScope));
@@ -67,17 +83,24 @@ public partial class TriviaSetupViewModel : ObservableObject
             "Science" => "General",
             "Space" => "Astronomy",
             "Biology" => "HumanBody",
+            "Geography" => "WorldGeography",
+            "Computers" => "Computing",
+            "Mythology" => "Myths",
             "General" => "GeneralKnowledge",
             _ => "Default"
         };
         OnPropertyChanged(nameof(SelectedSummary));
         OnPropertyChanged(nameof(SourceSummary));
+        OnPropertyChanged(nameof(IsOnlineOnlyCategory));
+        OnPropertyChanged(nameof(ShowSourceSummary));
     }
 
     partial void OnSelectedSubFieldChanged(string value)
     {
         OnPropertyChanged(nameof(SelectedSummary));
         OnPropertyChanged(nameof(SourceSummary));
+        OnPropertyChanged(nameof(IsOnlineOnlyCategory));
+        OnPropertyChanged(nameof(ShowSourceSummary));
     }
 
     partial void OnSelectedDifficultyChanged(string value)
@@ -113,6 +136,9 @@ public partial class TriviaSetupViewModel : ObservableObject
             "Science" => "General",
             "Space" => "Astronomy",
             "Biology" => "HumanBody",
+            "Geography" => "WorldGeography",
+            "Computers" => "Computing",
+            "Mythology" => "Myths",
             "General" => "GeneralKnowledge",
             _ => "Default"
         };

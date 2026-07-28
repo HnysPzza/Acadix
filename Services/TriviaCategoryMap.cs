@@ -62,6 +62,17 @@ public static class TriviaCategoryMap
         GetCategoryId(field, subField) is not null;
 
     /// <summary>
+    /// Categories with no questions in the built-in bank. These need a connection: there is
+    /// nothing local to fall back to when the API is unreachable.
+    /// </summary>
+    private static readonly HashSet<string> OnlineOnlyFields =
+        new(StringComparer.OrdinalIgnoreCase) { "Geography", "Computers", "Mythology" };
+
+    /// <summary>True when the category cannot be played offline.</summary>
+    public static bool IsOnlineOnly(string? field) =>
+        OnlineOnlyFields.Contains((field ?? string.Empty).Trim());
+
+    /// <summary>
     /// Human-readable note for categories that never use the API, shown in the setup screen so
     /// the behaviour is not mysterious.
     /// </summary>
@@ -71,6 +82,9 @@ public static class TriviaCategoryMap
 
         if (s.Equals("PhilippineHistory", StringComparison.OrdinalIgnoreCase))
             return "Philippine History uses Acadix's own curated questions.";
+
+        if (IsOnlineOnly(field))
+            return "Online only — needs a connection, no offline backup.";
 
         return IsRemoteSupported(field, subField)
             ? null

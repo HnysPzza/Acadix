@@ -60,7 +60,7 @@
                             <Label Text="{Binding Icon}" FontSize="36" HorizontalOptions="Center" />
                             <Label Text="{Binding Title}" FontSize="12" FontAttributes="Bold" 
                                    HorizontalTextAlignment="Center" 
-                                   TextColor="{StaticResource MobileCoral}" MaxLines="2" LineBreakMode="WordWrap">
+                                   TextColor="{StaticResource MobileCoralOnLight}" MaxLines="2" LineBreakMode="WordWrap">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label" Binding="{Binding IsUnlocked}" Value="False">
                                         <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />

@@ -189,21 +189,45 @@
         <BoxView x:Name="FeedbackFlash" IsVisible="False" Opacity="0" BackgroundColor="#3306D6A0"/>
 
         <!-- Shown while questions are fetched from the Open Trivia DB. -->
-        <Grid IsVisible="{Binding IsLoadingQuestions}" BackgroundColor="#CC000000">
-            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="16">
-                <ActivityIndicator IsRunning="{Binding IsLoadingQuestions}"
-                                   Color="White"
-                                   WidthRequest="44"
-                                   HeightRequest="44"/>
-                <Label Text="Loading fresh questions..."
+        <!--
+            Loading state. Deliberately not a bare centred spinner: it mirrors the shape of the
+            question card that is about to appear, so the layout does not jump when content
+            lands and the wait feels like part of the screen rather than a blocker.
+        -->
+        <Grid IsVisible="{Binding IsLoadingQuestions}" BackgroundColor="#E60D0D1A">
+            <VerticalStackLayout VerticalOptions="Center" Padding="28" Spacing="20">
+
+                <Label Text="LOADING"
+                       FontFamily="{StaticResource FontHeading}"
+                       FontSize="{StaticResource TextLabel}"
+                       CharacterSpacing="2.4"
+                       TextColor="#7C8AA5"
+                       HorizontalOptions="Start"/>
+
+                <Label Text="Finding fresh questions"
+                       FontFamily="{StaticResource FontHeading}"
+                       FontSize="{StaticResource TextTitle}"
                        TextColor="White"
-                       FontSize="16"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"/>
-                <Label Text="Pulling from the Open Trivia DB"
-                       TextColor="#B0B0CC"
-                       FontSize="12"
-                       HorizontalOptions="Center"/>
+                       LineHeight="1.15"
+                       HorizontalOptions="Start"/>
+
+                <!-- Skeleton rows standing in for the incoming answer options. -->
+                <VerticalStackLayout Spacing="12" Margin="0,4,0,0">
+                    <BoxView HeightRequest="14" CornerRadius="7" Color="#26FFFFFF" WidthRequest="240" HorizontalOptions="Start"/>
+                    <BoxView HeightRequest="14" CornerRadius="7" Color="#1AFFFFFF" WidthRequest="180" HorizontalOptions="Start"/>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12" Margin="0,12,0,0">
+                        <BoxView HeightRequest="52" CornerRadius="16" Color="#1AFFFFFF"/>
+                        <BoxView Grid.Column="1" HeightRequest="52" CornerRadius="16" Color="#1AFFFFFF"/>
+                        <BoxView Grid.Row="1" HeightRequest="52" CornerRadius="16" Color="#14FFFFFF"/>
+                        <BoxView Grid.Row="1" Grid.Column="1" HeightRequest="52" CornerRadius="16" Color="#14FFFFFF"/>
+                    </Grid>
+                </VerticalStackLayout>
+
+                <Label Text="Open Trivia DB"
+                       FontSize="{StaticResource TextCaption}"
+                       TextColor="#7480A0"
+                       Margin="0,8,0,0"
+                       HorizontalOptions="Start"/>
             </VerticalStackLayout>
         </Grid>
 

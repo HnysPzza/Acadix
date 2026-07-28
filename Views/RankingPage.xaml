@@ -119,7 +119,7 @@
                                                TextColor="{StaticResource TextSecondary}"
                                                FontSize="11"/>
                                         <Label Text="{Binding StreakDays, StringFormat='{0} day streak'}"
-                                               TextColor="{StaticResource MobileSuccess}"
+                                               TextColor="{StaticResource MobileSuccessOnLight}"
                                                FontSize="11"/>
                                     </VerticalStackLayout>
                                     <VerticalStackLayout Grid.Column="2" Spacing="0" VerticalOptions="Center">

@@ -60,6 +60,21 @@
     <Color x:Key="TextLight">#F9FAFB</Color>
     <Color x:Key="TextOnDark">#E2E8F0</Color>
 
+    <!--
+        Accessible text variants (WCAG AA, >=4.5:1 on MobileCanvas #EAF2EE).
+
+        The brand amber/coral/success colours are tuned for FILLS and STROKES, where contrast
+        rules do not apply. Used as small text on the light canvas they fail badly:
+            MobileAmber   #F6A623 -> 1.77:1   (needs 4.5)
+            MobileCoral   #F9735B -> 2.42:1
+            MobileSuccess #16A34A -> 2.89:1
+        These darker variants keep the same hue but pass. Use *OnLight tokens whenever the
+        colour is applied to TextColor over a light background; keep the originals for fills.
+    -->
+    <Color x:Key="MobileAmberOnLight">#8A5A00</Color>    <!-- 6.42:1 -->
+    <Color x:Key="MobileCoralOnLight">#B23A22</Color>    <!-- 5.24:1 -->
+    <Color x:Key="MobileSuccessOnLight">#0F7434</Color>  <!-- 5.13:1 -->
+
     <!-- Gradient Stops -->
     <Color x:Key="GradStart">#134E4A</Color>
     <Color x:Key="GradMid">#0F766E</Color>
