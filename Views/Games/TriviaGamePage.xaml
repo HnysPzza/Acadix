@@ -188,6 +188,41 @@
 
         <BoxView x:Name="FeedbackFlash" IsVisible="False" Opacity="0" BackgroundColor="#3306D6A0"/>
 
+        <!-- Shown while questions are fetched from the Open Trivia DB. -->
+        <Grid IsVisible="{Binding IsLoadingQuestions}" BackgroundColor="#CC000000">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="16">
+                <ActivityIndicator IsRunning="{Binding IsLoadingQuestions}"
+                                   Color="White"
+                                   WidthRequest="44"
+                                   HeightRequest="44"/>
+                <Label Text="Loading fresh questions..."
+                       TextColor="White"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+                <Label Text="Pulling from the Open Trivia DB"
+                       TextColor="#B0B0CC"
+                       FontSize="12"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Non-blocking notice, e.g. offline fallback or question pool recycled. -->
+        <Border IsVisible="{Binding HasSourceNotice}"
+                VerticalOptions="End"
+                HorizontalOptions="Center"
+                Margin="20,0,20,20"
+                Padding="14,8"
+                BackgroundColor="#CC000000"
+                Stroke="#33FFFFFF"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 14">
+            <Label Text="{Binding SourceNotice}"
+                   TextColor="#E0E0F0"
+                   FontSize="12"
+                   HorizontalTextAlignment="Center"/>
+        </Border>
+
         <Grid IsVisible="{Binding IsGameOver}" x:Name="GameOverOverlay" BackgroundColor="#B3000000" Opacity="0">
             <Border x:Name="GameOverCard" Margin="40" Padding="30" VerticalOptions="Center"
                     StrokeShape="RoundRectangle 16" BackgroundColor="#22FFFFFF" Stroke="#33FFFFFF" StrokeThickness="1">

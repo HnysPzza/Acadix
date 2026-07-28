@@ -101,6 +101,10 @@ public static class UserScope
 
         foreach (var key in ScopedIntKeys)
             ScopedPreferences.Remove(key);
+
+        // Trivia "already seen" history uses one generated key per category+difficulty. The
+        // provider owns that key format, so ask it rather than duplicating the naming here.
+        TriviaQuestionProvider.ClearAllHistory();
     }
 
     private static IEnumerable<string> GetQuickNoteKeys()

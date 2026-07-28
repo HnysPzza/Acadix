@@ -107,3 +107,44 @@ These are deliberate scope calls, listed so they are not forgotten:
   easy to unit-test.
 - **No retry queue for failed syncs.** A failed upload is retried on the next save or on app
   suspend, but nothing persists across a force-quit while offline.
+
+---
+
+## 7. Trivia questions now come from the Open Trivia DB
+
+The knowledge quiz previously served ~130 hardcoded questions from
+`Data/TriviaQuestionBank.cs`. It now fetches from [OpenTDB](https://opentdb.com) and keeps the
+local bank as an offline fallback.
+
+**No configuration needed** — OpenTDB requires no API key.
+
+### How it works
+- `OpenTriviaService` calls the API using a **session token**, which guarantees the API never
+  returns the same question twice for that player until the pool is exhausted.
+- `TriviaQuestionProvider` merges remote + local questions and keeps its own per-account
+  "already seen" history, so no-repeat also works offline and across token resets.
+- Requested difficulty (Easy/Medium/Hard) is passed straight to the API.
+- If the network is unavailable, the round silently falls back to the local bank and shows
+  "Offline — using Acadix's own questions."
+
+### Category mapping
+| Acadix | OpenTDB |
+|---|---|
+| History | 23 (History) |
+| Math | 19 (Science: Mathematics) |
+| Science / Space / Biology | 17 (Science & Nature) |
+| Animals | 27 (Animals) |
+| General | 9 (General Knowledge) |
+| **Philippine History** | **local only — deliberately** |
+
+Philippine History stays on the curated local bank: OpenTDB's History category is overwhelmingly
+Western and would replace curriculum-relevant content with unrelated questions.
+
+### Rate limits
+OpenTDB allows **one request per IP every 5 seconds**. All calls go through a shared throttle,
+and Endless/Zen prefetches the next batch of 50 before the queue runs dry so the player never
+waits mid-round. Do not lower `MinRequestInterval` in `OpenTriviaService`.
+
+### Attribution
+OpenTDB content is licensed **CC BY-SA 4.0**. If you publish the app, credit the Open Trivia
+Database in your about/credits screen.

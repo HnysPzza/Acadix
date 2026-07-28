@@ -1,4 +1,3 @@
-using AcadsJulie.Data;
 using AcadsJulie.Models;
 using AcadsJulie.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -21,8 +20,12 @@ public class TriviaAnswerResult
 public partial class TriviaViewModel : ObservableObject
 {
     private readonly DatabaseService _databaseService;
+    private readonly TriviaQuestionProvider _questionProvider;
     private IDispatcherTimer? _timer;
     private Queue<TriviaQuestion> _questionsQueue = new();
+
+    // Cancels an in-flight question fetch when the player leaves the page or restarts.
+    private CancellationTokenSource? _loadCts;
 
     [ObservableProperty] private string _field = "General";
     [ObservableProperty] private string _subField = "GeneralKnowledge";
@@ -34,6 +37,17 @@ public partial class TriviaViewModel : ObservableObject
     [ObservableProperty] private string _parrotAssetSource = "parrot_idle.json";
     [ObservableProperty] private string _selectedOption = string.Empty;
     [ObservableProperty] private bool _hasNoQuestions;
+
+    /// <summary>True while questions are being fetched, so the UI can show a loading state.</summary>
+    [ObservableProperty] private bool _isLoadingQuestions;
+
+    /// <summary>Short status line shown under the loader / after load (may be empty).</summary>
+    [ObservableProperty] private string _sourceNotice = string.Empty;
+
+    /// <summary>Drives visibility of the notice banner (no value converters exist in this project).</summary>
+    public bool HasSourceNotice => !string.IsNullOrWhiteSpace(SourceNotice);
+
+    partial void OnSourceNoticeChanged(string value) => OnPropertyChanged(nameof(HasSourceNotice));
 
     [ObservableProperty] private int _score;
     [ObservableProperty] private int _round;
@@ -64,25 +78,46 @@ public partial class TriviaViewModel : ObservableObject
     [ObservableProperty] private double _maxTime = 8.0;
     [ObservableProperty] private bool _isGameOver;
 
+    /// <summary>Questions fetched per batch in Endless/Zen (also the API's per-request maximum).</summary>
+    private const int EndlessBatchSize = 50;
+
+    /// <summary>Start fetching the next batch once the queue drops to this many questions.</summary>
+    private const int PrefetchThreshold = 5;
+
     private int _correctCount;
     private int _mistakes;
     private DateTime _sessionStart;
     private bool _isProcessingAnswer;
+    private bool _isPrefetching;
 
     public event EventHandler<TriviaAnswerResult>? OnRevealAnswer;
 
     /// <summary>Fired at the end of <see cref="InitGame"/> so the UI can refresh Lottie (e.g. Play Again).</summary>
     public event Action? GameSessionInitialized;
 
-    public TriviaViewModel() : this(App.DatabaseService) { }
+    public TriviaViewModel() : this(App.DatabaseService, App.TriviaQuestionProvider) { }
 
-    public TriviaViewModel(DatabaseService databaseService)
+    public TriviaViewModel(DatabaseService databaseService, TriviaQuestionProvider questionProvider)
     {
         _databaseService = databaseService;
+        _questionProvider = questionProvider;
     }
 
-    public void InitGame()
+    /// <summary>
+    /// Starts a new round. Kept synchronous so existing callers (page load, "Play Again") do not
+    /// change; the question fetch runs in the background and the UI shows a loading state until
+    /// it completes.
+    /// </summary>
+    public void InitGame() => _ = InitGameAsync();
+
+    public async Task InitGameAsync()
     {
+        // Abandon any fetch still running from a previous round.
+        _loadCts?.Cancel();
+        _loadCts?.Dispose();
+        _loadCts = new CancellationTokenSource();
+        var cancellationToken = _loadCts.Token;
+
         _timer?.Stop();
         Score = 0;
         Round = 0;
@@ -93,6 +128,7 @@ public partial class TriviaViewModel : ObservableObject
         SelectedOption = string.Empty;
         HasNoQuestions = false;
         IsGameOver = false;
+        SourceNotice = string.Empty;
         _sessionStart = DateTime.Now;
 
         MaxTime = Difficulty switch
@@ -103,17 +139,65 @@ public partial class TriviaViewModel : ObservableObject
             _ => 8.0
         };
 
-        int numQuestions = Mode == "Normal" ? 10 : 50;
-        var questions = TriviaQuestionBank.GetQuestions(Field, SubField, Difficulty, numQuestions);
-        TotalRounds = questions.Count;
-        _questionsQueue = new Queue<TriviaQuestion>(questions);
+        int numQuestions = Mode == "Normal" ? 10 : EndlessBatchSize;
+
+        // Show the loader and clear the previous question so nothing stale is visible.
+        IsLoadingQuestions = true;
+        CurrentQuestion = null;
+        ShuffledOptions.Clear();
+        TotalRounds = 0;
+
+        TriviaQuestionProvider.QuestionBatch batch;
+        try
+        {
+            batch = await _questionProvider.GetQuestionsAsync(
+                Field, SubField, Difficulty, numQuestions, cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            // A newer round took over; let that one drive the UI.
+            return;
+        }
+        finally
+        {
+            if (!cancellationToken.IsCancellationRequested)
+                RunOnMainThread(() => IsLoadingQuestions = false);
+        }
+
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
+        // The continuation above may resume off the UI thread; everything below touches
+        // observable state and the question queue, so finish the setup on the main thread.
+        if (!MainThread.IsMainThread)
+        {
+            MainThread.BeginInvokeOnMainThread(() => ApplyLoadedBatch(batch));
+            return;
+        }
+
+        ApplyLoadedBatch(batch);
+    }
+
+    /// <summary>Applies a freshly loaded batch and starts the round. Must run on the UI thread.</summary>
+    private void ApplyLoadedBatch(TriviaQuestionProvider.QuestionBatch batch)
+    {
+        // The session clock should start when the player actually sees question one, not when
+        // the network request began.
+        _sessionStart = DateTime.Now;
+
+        SourceNotice = BuildSourceNotice(batch);
+
+        TotalRounds = batch.Questions.Count;
+        _questionsQueue = new Queue<TriviaQuestion>(batch.Questions);
 
         if (_questionsQueue.Count == 0)
         {
             HasNoQuestions = true;
             CurrentQuestion = new TriviaQuestion
             {
-                QuestionText = "No questions available for this category yet. Please try another category."
+                QuestionText = batch.UsedOfflineFallback
+                    ? "Couldn't load questions. Check your connection and try again."
+                    : "No questions available for this category yet. Please try another category."
             };
             ShuffledOptions.Clear();
             TimeLeft = 0;
@@ -138,6 +222,20 @@ public partial class TriviaViewModel : ObservableObject
 
         NextQuestion();
         GameSessionInitialized?.Invoke();
+    }
+
+    private static string BuildSourceNotice(TriviaQuestionProvider.QuestionBatch batch)
+    {
+        if (batch.Questions.Count == 0)
+            return string.Empty;
+
+        if (batch.UsedOfflineFallback)
+            return "Offline — using Acadix's own questions.";
+
+        if (batch.HistoryRecycled)
+            return "You've seen every question here — starting a fresh cycle.";
+
+        return string.Empty;
     }
 
     private void LoadQuestion(TriviaQuestion question)
@@ -223,23 +321,117 @@ public partial class TriviaViewModel : ObservableObject
         if (_questionsQueue.Count > 0)
         {
             LoadQuestion(_questionsQueue.Dequeue());
+            MaybePrefetchMore();
+            return;
         }
-        else
+
+        if (Mode == "Normal")
         {
-            if (Mode != "Normal")
+            EndGame();
+            return;
+        }
+
+        // Endless/Zen ran dry before the prefetch landed — wait for a top-up.
+        _ = RefillAndContinueAsync();
+    }
+
+    /// <summary>
+    /// In Endless/Zen, fetches the next batch in the background once the queue runs low, so the
+    /// player never waits on the network mid-round.
+    /// </summary>
+    private void MaybePrefetchMore()
+    {
+        if (Mode == "Normal" || _isPrefetching)
+            return;
+
+        if (_questionsQueue.Count > PrefetchThreshold)
+            return;
+
+        _isPrefetching = true;
+        _ = PrefetchAsync();
+    }
+
+    private async Task PrefetchAsync()
+    {
+        try
+        {
+            var token = _loadCts?.Token ?? CancellationToken.None;
+            var batch = await _questionProvider.GetQuestionsAsync(
+                Field, SubField, Difficulty, EndlessBatchSize, token);
+
+            if (token.IsCancellationRequested || batch.Questions.Count == 0)
+                return;
+
+            // The queue is consumed on the UI thread, so enqueue there too rather than mutating
+            // it from this background continuation.
+            EnqueueOnMainThread(batch.Questions);
+        }
+        catch (OperationCanceledException)
+        {
+            // Round ended while fetching.
+        }
+        finally
+        {
+            _isPrefetching = false;
+        }
+    }
+
+    private void EnqueueOnMainThread(List<TriviaQuestion> questions) =>
+        RunOnMainThread(() =>
+        {
+            foreach (var question in questions)
+                _questionsQueue.Enqueue(question);
+
+            TotalRounds += questions.Count;
+        });
+
+    /// <summary>
+    /// Runs <paramref name="action"/> on the UI thread. The question queue and observable state
+    /// are touched from network continuations, which may resume on a background thread.
+    /// </summary>
+    private static void RunOnMainThread(Action action)
+    {
+        if (MainThread.IsMainThread)
+            action();
+        else
+            MainThread.BeginInvokeOnMainThread(action);
+    }
+
+    /// <summary>Blocking top-up for when the queue empties before a prefetch completes.</summary>
+    private async Task RefillAndContinueAsync()
+    {
+        IsLoadingQuestions = true;
+        try
+        {
+            var token = _loadCts?.Token ?? CancellationToken.None;
+            var batch = await _questionProvider.GetQuestionsAsync(
+                Field, SubField, Difficulty, EndlessBatchSize, token);
+
+            if (token.IsCancellationRequested)
+                return;
+
+            if (batch.Questions.Count == 0)
             {
-                var questions = TriviaQuestionBank.GetQuestions(Field, SubField, Difficulty, 50);
-                TotalRounds = questions.Count;
-                _questionsQueue = new Queue<TriviaQuestion>(questions);
-                if (_questionsQueue.Count > 0)
-                    LoadQuestion(_questionsQueue.Dequeue());
-                else
-                    EndGame();
+                RunOnMainThread(EndGame);
+                return;
             }
-            else
+
+            RunOnMainThread(() =>
             {
-                EndGame();
-            }
+                foreach (var question in batch.Questions)
+                    _questionsQueue.Enqueue(question);
+
+                TotalRounds += batch.Questions.Count;
+                LoadQuestion(_questionsQueue.Dequeue());
+            });
+        }
+        catch (OperationCanceledException)
+        {
+            // Player left the page.
+        }
+        finally
+        {
+            IsLoadingQuestions = false;
         }
     }
 
@@ -268,5 +460,13 @@ public partial class TriviaViewModel : ObservableObject
     [RelayCommand]
     public void RestartGame() => InitGame();
 
-    public void Cleanup() => _timer?.Stop();
+    public void Cleanup()
+    {
+        _timer?.Stop();
+
+        // Abandon any in-flight fetch so it cannot resurrect a finished round.
+        _loadCts?.Cancel();
+        _loadCts?.Dispose();
+        _loadCts = null;
+    }
 }

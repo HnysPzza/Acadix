@@ -22,6 +22,8 @@ namespace AcadsJulie
         public static CourseService CourseService { get; private set; } = new CourseService();
         public static GoalService GoalService { get; private set; } = new GoalService();
         public static ContentLibraryService ContentLibraryService { get; private set; } = new ContentLibraryService();
+        public static OpenTriviaService OpenTriviaService { get; private set; } = new OpenTriviaService();
+        public static TriviaQuestionProvider TriviaQuestionProvider { get; private set; } = new TriviaQuestionProvider(OpenTriviaService);
 
         public static void ShowNotificationWhenAllowed(NotificationRequest notification)
         {
@@ -113,6 +115,10 @@ namespace AcadsJulie
             CourseService = new CourseService();
             GoalService = new GoalService();
             ContentLibraryService = new ContentLibraryService();
+
+            // Recreated so the trivia no-repeat history is re-read under the new account scope.
+            OpenTriviaService = new OpenTriviaService();
+            TriviaQuestionProvider = new TriviaQuestionProvider(OpenTriviaService);
         }
 
         public static Page GetPostAuthStartPage()

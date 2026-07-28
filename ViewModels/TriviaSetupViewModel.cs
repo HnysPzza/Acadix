@@ -1,3 +1,4 @@
+using AcadsJulie.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
@@ -46,6 +47,14 @@ public partial class TriviaSetupViewModel : ObservableObject
     public bool ShowAnimalScope => SelectedField == "Animals";
     public string SelectedSummary => $"Selected: {SelectedField} • {SelectedSubField} • {SelectedDifficulty}";
 
+    /// <summary>
+    /// Explains where questions come from, so it is obvious which categories pull fresh
+    /// questions online and which use the built-in bank.
+    /// </summary>
+    public string SourceSummary =>
+        TriviaCategoryMap.GetLocalOnlyReason(SelectedField, SelectedSubField)
+        ?? "Fresh questions from the Open Trivia DB, with offline backup.";
+
     partial void OnSelectedFieldChanged(string value)
     {
         OnPropertyChanged(nameof(ShowHistoryScope));
@@ -62,11 +71,13 @@ public partial class TriviaSetupViewModel : ObservableObject
             _ => "Default"
         };
         OnPropertyChanged(nameof(SelectedSummary));
+        OnPropertyChanged(nameof(SourceSummary));
     }
 
     partial void OnSelectedSubFieldChanged(string value)
     {
         OnPropertyChanged(nameof(SelectedSummary));
+        OnPropertyChanged(nameof(SourceSummary));
     }
 
     partial void OnSelectedDifficultyChanged(string value)
