@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Backup rules for Android 11 and below (android:fullBackupContent).
+
+	Backup is currently disabled outright via android:allowBackup="false". These rules exist so
+	that if it is ever re-enabled, the stores holding personal data stay excluded by default
+	rather than silently starting to sync off-device.
+
+	Excluded:
+	  - the default SharedPreferences file, which holds the user profile, academic task notes,
+	    goals, quests and game history (all plaintext)
+	  - Acadix's own scoped preference stores
+-->
+<full-backup-content>
+	<exclude domain="sharedpref" path="." />
+</full-backup-content>

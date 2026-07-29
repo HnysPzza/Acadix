@@ -95,17 +95,32 @@ Unifying nudged one trivia caption from 4.64:1 to 4.34:1, so it was moved to `Da
 
 ---
 
-## Dead code found
+## Dead code — now deleted
 
-`Views/Games/QuestionView.xaml` is **never instantiated** anywhere in the app. Only
-`QuestionViewModel` is registered in `MauiProgram.cs`; nothing resolves the view.
+`Views/Games/QuestionView.xaml` was never instantiated anywhere in the app, and was the sole
+consumer of `GamifiedTheme.xaml` — an entire **third palette** in Duolingo colours (`#58CC02`
+green, `#1CB0F6` blue, `#FF4B4B` red) that clashed with the teal/coral brand.
 
-It is the sole consumer of `GamifiedTheme.xaml` — an entire **third palette** in Duolingo colours
-(`#58CC02` green, `#1CB0F6` blue, `#FF4B4B` red) that clashes with your teal/coral brand.
+Removed in full:
 
-Both are left in place and clearly marked deprecated rather than deleted, since I can't run the
-app to prove nothing references them at runtime. **Recommend deleting both once you've confirmed
-in the IDE** — that removes 16 colours and the last competing palette in one commit.
+| File | Why |
+|---|---|
+| `Views/Games/QuestionView.xaml` | Orphan — never resolved or navigated to |
+| `Views/Games/QuestionView.xaml.cs` | Code-behind for the orphan |
+| `ViewModels/QuestionViewModel.cs` | Only consumed by the orphan (incl. `AnswerOptionViewModel`) |
+| `Resources/Styles/GamifiedTheme.xaml` | Third palette, 16 colours, no remaining consumers |
+| `Services/IHapticService.cs` | Only injected into `QuestionViewModel` |
+| `Services/HapticService.cs` | Implementation of the above |
+
+`HapticService` went with it because every live ViewModel calls `HapticFeedback.Default`
+directly — the abstraction had exactly one consumer, and it was the dead view.
+
+Also cleaned: the `GamifiedTheme` merge in `App.xaml`, the `QuestionViewModel` and
+`IHapticService` DI registrations in `MauiProgram.cs`, and its now-unused
+`using AcadsJulie.Services`.
+
+**Result: three style dictionaries** (`Colors`, `Typography`, `ControlStyles` + `Styles`), one
+palette, zero competing systems.
 
 ---
 

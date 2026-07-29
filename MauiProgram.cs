@@ -5,7 +5,6 @@ using AcadsJulie.Views.Games;
 using AcadsJulie.ViewModels;
 using Plugin.LocalNotification;
 using CommunityToolkit.Maui;
-using AcadsJulie.Services;
 
 namespace AcadsJulie
 {
@@ -40,10 +39,6 @@ namespace AcadsJulie
             builder.Services.AddTransient<SequenceGameViewModel>();
             builder.Services.AddTransient<QuickMathViewModel>();
             builder.Services.AddTransient<AchievementsViewModel>();
-            builder.Services.AddTransient<QuestionViewModel>();
-
-            // Services
-            builder.Services.AddSingleton<IHapticService, HapticService>();
 
 #if DEBUG
     		builder.Logging.AddDebug();

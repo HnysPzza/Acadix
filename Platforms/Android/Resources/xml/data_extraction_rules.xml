@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Data extraction rules for Android 12+ (android:dataExtractionRules).
+
+	Covers both cloud backup and device-to-device transfer. Backup is currently disabled via
+	android:allowBackup="false"; these rules are the safety net if it is re-enabled.
+
+	SharedPreferences is excluded because it holds the user profile, academic task notes, goals,
+	quests and game history in plaintext. Auth tokens are not covered here   they live in
+	SecureStorage (Android Keystore) and are never included in backups.
+-->
+<data-extraction-rules>
+	<cloud-backup>
+		<exclude domain="sharedpref" path="." />
+	</cloud-backup>
+	<device-transfer>
+		<exclude domain="sharedpref" path="." />
+	</device-transfer>
+</data-extraction-rules>

@@ -90,8 +90,9 @@ existing data now belongs to whoever logs in first. Anyone else gets a fresh pro
 - [ ] A **web page** describing how to request deletion — also required; link it in the listing
 - [ ] Privacy policy covering what you collect (email, display name, scores)
 - [ ] Complete the Play Console *Data safety* form
-- [ ] Set `android:allowBackup="false"` in `AndroidManifest.xml` if you do not want task notes
-      pulled off the device via ADB backup
+- [x] `android:allowBackup="false"` set in `AndroidManifest.xml`, with `backup_rules.xml` and
+      `data_extraction_rules.xml` excluding SharedPreferences as a safety net if backup is ever
+      re-enabled
 - [ ] Release keystore SHA-1 added to the Google OAuth client (step 3)
 
 ---
